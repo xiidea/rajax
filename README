@@ -1,0 +1,185 @@
+/**
+ * rajax a javascript iframe form uploader
+ * with styled form input support
+ *
+ * v2.9
+ *
+ * Submit ajax like form along with file input
+ * Any styled element can be used as File Input
+ *
+ * By Roni Kumar Saha (roni.cse@gmail.com)
+ * Mobile: 01817087873
+ * https://github.com/xiidea/rajax
+ *
+ * Please use as you wish at your own risk.
+ *
+ *
+ * Change LOG
+ *------------------------------
+ * After version 1.0 next versions till 2.5 never been realeased. 
+ * From version 2 the code structure is fully re-wiritten. 
+ * i.e the new library is not backword competeble. If you are 
+ * upgreading from v1.0 you need to change your whole code.
+ * The changes made in version 2.x are:
+ * 1.  Code block re-written
+ * 2.	Firefox busy state removed
+ * 3.	Prevent the submit again on refreshing the main page
+ * 4.	Styled file input box featured added(You can add any html dom as file input)
+ * 5.	Any kind of element reference acceptable including jquery element object
+ * 		(you can pass “element_id”,”# “element_id”, $(“element_id” ), 
+ *		or element object as a element argument, all are autometically detected )
+ * 6.	Client side File input validation done as per selected option
+ * 7.	Message displaying funciton is customizable/overrridable
+ * 8.	Full controle over the file selecting, form submitting process
+ * 9.	You can override the onchange function and restrict any file selection
+ * 10.	Extra data can be posted by javascript {key:value} pair object
+ * 11.	Json response type support added
+ * 12.	Remove external library/funciton dependency
+ * 13.	Encapsulate to private functions
+ * 14.	New file type added [v2.6]
+ * 15.	autoSubmit settings option added now the post method will be called autometically
+ *		uppon form submission. default is false, to make it competable and safe to use with 
+ *		other library used (like formValidator). [v2.7]
+ * 16. Bug Fixed (The styled input was not working on some styled html) [v2.8]
+ * 17. New Feature added, styled input now support multiple upload [v2.9]
+ * 18. Bug Fixed, Submitting form without selecting any file was throwing an error
+ * 19. Feature added, now can be set as required field
+ *
+ *
+ *--------------------------
+ * USES:
+ *--------------------------
+ * @param1={Object} form reference
+ * @param2={string} will be used as name for file input
+ * @param1={Object} reference for a button which will be used as file input
+ * @URL={string} the script url
+ *
+ *	var rajax_obj=	new rajax({@param1},
+ *								{
+ *	 								//Styled File Inputs
+ *									finputs:{
+ *												{@param2}:{
+ *														//Styled Button Reference
+ *														button:'',
+ *														
+ *														//Denied file type(s)	[deny has more priority then acceptence]
+ *														deniedType:'script',
+ *														//Allowed file type(s)
+ *														allowedType:'',
+ *														
+ *														//Denied extention(s) used only if deniedType is 'custom'
+ *														denideExt:'',
+ *														//Allowed extention(s) used only if allowedType is 'custom'
+ *														allowedExt:'',
+ *														
+ *														// Class applied to button when mouse is hovered
+ *														hoverClass: 'hover',
+ *														// Class applied to button when button is focused
+ *														focusClass: 'focus',
+ *														// Class applied to button when button is disabled
+ *														disabledClass: 'disabled',
+ *														
+ *														//Display Selected File Name, set false, 
+ * 														//if you like to handle your self
+ *														showFileName:true,
+ *																	
+ *														// Id Of selected file name
+ *														//Usefull when you like to display file name in your own element
+ *														selectedFileLabel: '',
+ *														
+ *														// Class applied to selected file name  element
+ *														selectedFileClass: '',			
+ *																	
+ *														// When The file input reseted or the form reseted
+ *														onClear:function(file){	
+ *														},
+ *														
+ *
+ *														//default message to show when no file selected for a required file input		
+ *														nofileMsg:'No File Selected',
+ *
+ *														//allow multiple file upload
+ *														multipleFile:false,			
+ *
+ *														// When user selects a file, useful with autoSubmit disabled
+ *														// You can return false to cancel upload			
+ *														onChange: function(file, extension){
+ *														},
+ *														
+ *														//When user select any denied File
+ *														//You can process file name and extention to view custom message.
+ *														//Return True to override native alert message
+ *														onDenied:function(file,extention){
+ *														},
+ *														
+ *														//When user select any acceptable File
+ *														//You can process with file name and extention
+ *														//Return false to cancel selection
+ *														// Most of the time the function is not needed
+ *														onAccept:function(file,extention){
+ *														},
+ *														
+ *														//It will helpful to show error message as per user wish
+ *														showMessage:null		
+ *													}
+ *												}
+ *										},
+ *									
+ * 									//Set to true for debugging server side out put. The 
+ *									//request will be submmitted in blank target
+ *									debug : false,
+ *									
+ *									// Location of the server-side script, 
+ *									// if not provided it will use the form action value
+ *									action: {@URL},
+ *									
+ *									// Additional data to send as {name:value} pair
+ *									data: {},
+ *									
+ *									// The type of data that you're expecting back from the server.
+ *									// html and xml are detected automatically.
+ *									// Only useful when you are using json data as a response.
+ *									// Set to "json" in that case. 
+ *									responseType: false,
+ *									
+ *									//enable it to call post method uppon form submit autometically
+ *									Default disable, make it safe to work with other library
+ *									autoSubmit:false,
+ *																											
+ *									// Callback to fire before form is submitted
+ *									// You can return false to cancel submit
+ *									onSubmit: function(){
+ *									},
+ *									
+ *									// Fired when file upload is completed
+ *									// WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
+ *									onComplete: function(response){
+ *									}	
+ *							});
+ * //Triger the submit event manually
+ * rajax_obj.post();
+ *
+ *-------------
+ * example
+ *---------------
+ *	var rajax_obj=	new rajax(form,
+ *								{
+ *								 finputs:{
+ *											profile_pic1:{
+ *													button:'file_uploader1',
+ *													allowedType:'image'		
+ *												},
+ *											doc_attachment:{
+ *													button:'file_uploader2',
+ *													allowedType:'document'		
+ *												}
+ *									},
+ *									action:'submitto.php',
+ *									onSubmit:function(){
+ *									},
+ *									onComplete:function(response){
+ *									}	
+ *							});
+ * 	
+ *	rajax_obj.post();	//Triger submitting the form
+ */
