@@ -62,7 +62,7 @@
  *														// Class applied to selected file name  element
  *														selectedFileClass: '',			
  *														// Class applied to selected file name  element
- *														multiInputRemoveClass:'removve', 			
+ *														multiInputRemoveClass:'remove', 			
  *
  *														// When The file input reseted or the form reseted
  *														onClear:function(file){	
@@ -482,7 +482,7 @@
             selectedFileClass: '',	
 			            
             // Class applied to selected file name  element
-			multiInputRemoveClass:'removve', 
+			multiInputRemoveClass:'remove', 
 			
 			//message to show on no selected file error
 			nofileMsg:'No file selected',
