@@ -1,0 +1,32 @@
+ Change LOG
+ ------------------------------
+  After version 1.0 next versions till 2.5 never been realeased. 
+  From version 2 the code structure is fully re-wiritten. 
+  i.e the new library is not backword competeble. If you are 
+  upgreading from v1.0 you need to change your whole code.
+  The changes made in version 2.x are:
+  1.  Code block re-written
+  2.  Firefox busy state removed
+  3.	Prevent the submit again on refreshing the main page
+  4.	Styled file input box featured added(You can add any html dom as file input)
+  5.	Any kind of element reference acceptable including jquery element object
+  		(you can pass “element_id”,”# “element_id”, $(“element_id” ), 
+ 		or element object as a element argument, all are autometically detected )
+  6.	Client side File input validation done as per selected option
+  7.	Message displaying funciton is customizable/overrridable
+  8.	Full controle over the file selecting, form submitting process
+  9.	You can override the onchange function and restrict any file selection
+  10.	Extra data can be posted by javascript {key:value} pair object
+  11.	Json response type support added
+  12.	Remove external library/funciton dependency
+  13.	Encapsulate to private functions
+  14.	New file type added [v2.6]
+  15.	autoSubmit settings option added now the post method will be called autometically
+ 		uppon form submission. default is false, to make it competable and safe to use with 
+ 		other library used (like formValidator). [v2.7]
+  16. Bug Fixed (The styled input was not working on some styled html) [v2.8]
+  17. New Feature added, styled input now support multiple upload [v2.9]
+  18. Bug Fixed, Submitting form without selecting any file was throwing an error
+  19. Feature added, now can be set as required field
+  20. Move to bitbucket.org
+  21. Styled File Input Is now work stand alone
