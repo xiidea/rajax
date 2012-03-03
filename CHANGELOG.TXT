@@ -30,3 +30,4 @@
   19. Feature added, now can be set as required field
   20. Move to bitbucket.org
   21. Styled File Input Is now work stand alone
+  22. Cross Domain Support added V3.1

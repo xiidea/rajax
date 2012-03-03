@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.0
+ * v3.1
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -174,6 +174,20 @@
 		"script"	:'php|html|js|htm|htmls|dhtml|php3|phps|php4|php5|asp|aspx|htaccess|vb|asr|htpasswd|asc|as|inc|config|cs|asa'
 	 };
 	 
+	function getHostname(url) {
+		var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
+		var arr= url.match(re);
+		return arr?arr[1].toString():document.location.hostname;
+	}
+	
+	function returnJSON(response){
+		if(response){
+		 return eval("(" + response + ")");	
+		}else{
+			return {};
+		}
+	}
+	
 	 function getExtList(type){
 		if(type=='' || type=='custom')
 			return '';
@@ -986,6 +1000,9 @@
 			//request will be submmitted in blank target
             debug : false,
 			
+			//The local empty resource url
+			localResource:"blank.html",
+			
 			// Location of the server-side script
             action: null,
             
@@ -1019,6 +1036,10 @@
                 this._settings[i] = options[i];
             }
         }
+		
+		//These two variables are critical to the success of this operation
+		this.xdm_formSubmitted = false;
+		this.sameDomainRestored = false;
 		
 		//CREATE ALL STYLED INPUT
 		this.sfinputs=new Array();
@@ -1164,9 +1185,49 @@
                         return;
                 }
                 
-                var doc = iframe.contentDocument ? iframe.contentDocument : window.frames[iframe.id].document;
+               
                 
-                // fixing Opera 9.26,10.00
+                var response;
+				
+				 //If this is the initial response from the POST, we are still in the POST server's domain
+				 if(self.xdm_formSubmitted && !self.sameDomainRestored)
+				 {
+					   //Now you know we're about to restore the local domain right?
+					   self.sameDomainRestored = true;
+					   //localResourceUrl is passed by the calling page and points to a local empty page
+					   iframe.contentWindow.location = self.localResource;
+					   return false;
+				 }
+				 //If the form was submitted and we have loaded data from our own domain, we are good. Thank you for coming
+				 //and here is your data! It's gonna be 5 dollars, Thank you!
+				 else if(self.xdm_formSubmitted && self.sameDomainRestored)
+				 {
+					response=iframe.contentWindow.name;
+					self.sameDomainRestored = false;
+					self.xdm_formSubmitted = false;
+					
+					if(!response){
+						response="";	
+					}
+					
+					if (settings.responseType && settings.responseType.toLowerCase() == 'json') {
+						response=returnJSON(response);
+					}
+					settings.onComplete.call(self,response);
+					
+					// Reload blank page, so that reloading main page
+					// does not re-submit the post. Also, remember to
+					// delete the frame
+					toDeleteFlag = true;
+					
+					// Fix IE mixed content issue
+					iframe.src = "javascript:'<html></html>';";
+					return;
+				 }
+				
+				var doc = iframe.contentDocument ? iframe.contentDocument : window.frames[iframe.id].document;
+				
+				// fixing Opera 9.26,10.00
                 if (doc.readyState && doc.readyState != 'complete') {
                    // Opera fires load event multiple times
                    // Even when the DOM is not ready yet
@@ -1180,9 +1241,7 @@
                     // when body.innerHTML changed from false 
                     // to server response approx. after 1 sec
                     return;
-                }
-                
-                var response;
+                }               
                 
                 if (doc.XMLDocument) {
                     // response is a xml document Internet Explorer property
@@ -1202,12 +1261,7 @@
                             doc.normalize();
                             response = doc.body.firstChild.firstChild.nodeValue;
                         }
-                        
-                        if (response) {
-                            response = eval("(" + response + ")");
-                        } else {
-                            response = {};
-                        }
+                        response=returnJSON(response)
                     }
                 } else {
                     // response is a xml document
@@ -1254,10 +1308,14 @@
                 return false;
             }
 			
+			uniqueid=(form.action.indexOf("?")!=-1)? "&"+new Date().getTime() : "?"+new Date().getTime();	//Unify the request
+			form.action+=uniqueid;
+			if(getHostname(settings.action)!=document.location.hostname.toString()){	//Cross Domain submited
+				this.xdm_formSubmitted = true;
+				form.action+="&XDM=true";
+			}
             form.submit();
-			
             removeNode(document.getElementById('rajax_input_holder'+iframe.name));           
-            
             // Get response from iframe and fire onComplete event when ready
             this._getResponse(iframe);
 			return false;            

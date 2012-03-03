@@ -14,7 +14,6 @@
 			//Example 1
 			rajax_obj1=	new rajax('form1',
 										{
-										 
 										 finputs:{
 													attachment:{
 															button:'button1',
@@ -25,10 +24,9 @@
 															selectedFileLabel:'selected_basic_file',	
 														}
 											},
-											action:'read.php',
+											action:'post.php',
 											onComplete:function(response){
-												
-												document.getElementById('form2').reset();
+												document.getElementById('form1').reset();
 												document.getElementById('output').innerHTML=response;
 											}	
 										});		
@@ -80,6 +78,7 @@
 	/*]]>*/</script>
 	</head>
 <body>
+<div id="output"></div>
 <div id="text">
 <h1>Rajax Form Submitting with styled file input demo</h1>
 <p>
@@ -143,13 +142,11 @@
                 <p>document Selected:</p>
                 <div id="selected_doc_file1"></div>
                 <br>
-
                 <input class="button" type="submit" value="Submit form"/>
                 <input class="button" type="reset" value="Reset form"/>
               </div>
         </form>
 	</li>
 </ul>
-<div id="output" style="clear:both"></div>
 </body>
 </html>

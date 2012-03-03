@@ -12,11 +12,12 @@ Key Features
 * Supports File Input type validation
 * Ajax like form submit with custom data
 * No data size limitation
+* Cross domain communication using name transport
  
 
 Current Active Version
 ======================
-v 3.0
+v 3.1
 
  
 USES
@@ -25,7 +26,7 @@ Rajax Form with styled input button
 
 
     var rajax_obj=new rajax(form,
-    	{
+     {
     		 finputs:
     		   {
     			profile_pic1:
@@ -61,8 +62,35 @@ Styled Input Only
     			selectedFileClass:'selectedFileClass'
     		});
 
+* **Cross domain Implementation**
+
+Cross domain communication need some extra scripting and its till experimental. only checked on FF10, IE9, Chrome17. Hope fully it should work on other version of browser. To perform cross browser submission you need to follow the steps bellow:
+
+* Place **blank.html** file in your working directory or any other location and assign as **localResource** value.
+                                                                                                       
+<pre>
+    var rajax_obj=new rajax(form,
+      {
+    	  localResource:"path/to/local/blank.html"
+      });
+</pre>
+
+* Remote Server Scripting: You need to add a javascript code on the page of remote domain
+
+To pass Your Message
+
+    <script>
+    	window.name="Your Message Here";
+    </script>
+
+or To pass Full Body COntent
+
+    <script>
+     window.name=document.documentElement.innerHTML;
+    </script>
+
+
 
 Dependencies
 ============
 To use this library you only need javascript support. 
-
