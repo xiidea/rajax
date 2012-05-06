@@ -181,10 +181,15 @@
 	}
 	
 	function returnJSON(response){
-		if(response){
-		 return eval("(" + response + ")");	
-		}else{
-			return {};
+		try{
+			if(response){
+			 return eval("(" + response + ")");	
+			}else{
+				return {};
+			}
+		}catch(e){
+			//error occured return the whole response
+			return response;
 		}
 	}
 	
