@@ -70,7 +70,37 @@
 													selectedFileClass:'selectedFileClass'
 											});
  
+			rajax_obj3=	new rajax('',
+ 								{
+								// responseType:'json',
+ 								 finputs:{
+ 											profile_pic:{
+ 													button:'image_upload',
+ 													allowedType:'image',
+													selectedFileLabel:'selected_img_file',	
+ 												},
+ 											doc_attachment:{
+ 													button:'doc_upload',
+ 													allowedType:'document',
+													selectedFileLabel:'selected_doc_file',
+													multipleFile:true,
+													selectedFileClass:'selectedFileClass'
+ 												}
+ 									},
+									//data:
+ 									action:'post.php',
+									onBeforeSubmit:function(ref){
+										ref.setData({'username':'roni','password':'123456'});
+										return true;
+									},
+ 									onComplete:function(response){
+										document.getElementById('output').innerHTML=response;
+ 									}	
+ 							});
+							
+							
 		}
+		 
 		
 		function validate_me(){
 			return sainput1.validate();
@@ -147,6 +177,27 @@
               </div>
         </form>
 	</li>
+    
+     <li id="example4" class="example">
+		<p>Use of without form element</p>
+		
+            <div class="wrapper">
+                <div id="image_upload2" class="button fl">Select Image File</div>
+            </div>
+            <div class="wrapper">
+                <div id="doc_upload2" class="button fl">Select Document File</div>
+            </div>
+            <div class="wrapper"><br>
+                <p>image Selected:</p>
+                <ol id="selected_img_file2"></ol>
+                <p>document Selected:</p>
+                <div id="selected_doc_file2"></div>
+                <br>
+                <input class="button" type="button" value="Submit form" onClick="rajax_obj3.post()"/>
+                <input class="button" type="reset" value="Reset form"/>
+              </div>
+	</li>
+    
 </ul>
 </body>
 </html>

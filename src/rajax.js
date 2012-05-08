@@ -181,15 +181,10 @@
 	}
 	
 	function returnJSON(response){
-		try{
-			if(response){
-			 return eval("(" + response + ")");	
-			}else{
-				return {};
-			}
-		}catch(e){
-			//error occured return the whole response
-			return response;
+		if(response){
+		 return eval("(" + response + ")");	
+		}else{
+			return {};
 		}
 	}
 	
@@ -563,7 +558,7 @@
 			this._settings.name=name;
 		}
 		 
-		 
+		
 		 var button = GetElement(this._settings['button']);
 		         
         if ( ! button || button.nodeType !== 1){
@@ -1027,6 +1022,11 @@
             // You can return false to cancel submit
             onSubmit: function(){
             },
+			
+			// Callback to fire before form is ready for submission
+            // You can return false to cancel submit
+            onBeforeSubmit: function(){
+            },
             
 			// Fired when file upload is completed
             // WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
@@ -1053,14 +1053,18 @@
 		}
 		
 		     // form isn't necessary a dom element
-        var form=GetElement(form);
-		
-		 if ( ! form || form.nodeType !== 1){
-            throw new Error("Please make sure that you're passing a valid element"); 
-        }
-		
-		if ( form.nodeName.toUpperCase() != 'FORM'){
-			throw new Error("Please make sure that you're passing a valid form element"); 		
+		if(form!=""){
+			var form=GetElement(form);			
+			 if ( ! form || form.nodeType !== 1){
+				throw new Error("Please make sure that you're passing a valid element"); 
+			}
+			
+			if ( form.nodeName.toUpperCase() != 'FORM'){
+				throw new Error("Please make sure that you're passing a valid form element"); 		
+			}
+		}else{
+			form=this._createForm();
+			form.generated=true;	
 		}
 		
 		// DOM element
@@ -1071,9 +1075,9 @@
 			this._settings.action
 		}
 		
-		if(this._settings.autoSubmit){
+		if(this._settings.autoSubmit && form!=""){
 			self=this;
-			addEvent(form, 'submit', function(){
+			addEvent(self._form, 'submit', function(){
                 self.post();
             });
 		}
@@ -1113,6 +1117,20 @@
             return iframe;
         },
 		
+		 /**
+		 * Creates form, that will be submitted to iframe
+		 */
+		_createForm: function(){
+			// We can't use the following code in IE6
+			// var form = document.createElement('form');
+			// form.setAttribute('method', 'post');
+			// form.setAttribute('enctype', 'multipart/form-data');
+			// Because in this case file won't be attached to request
+			var form = toElement('<form method="post" enctype="multipart/form-data"></form>');
+			form.style.display = 'none';
+			document.body.appendChild(form);	
+			return form;
+		},
 		 /**
          * Config form elements, that will be submitted to iframe
          * @param {Element} iframe Where to submit
@@ -1293,11 +1311,17 @@
             var self = this, settings = this._settings;
             
             if ( ! this._form){                
-                return false;                
+				return false;                
             }
                                                 
             // sending request    
             var iframe = this._createIframe();
+			
+			// user returned false to cancel submit
+            if (false === settings.onBeforeSubmit.call(this,this)){               
+                return false;
+            }
+			
             var form = this._configForm(iframe,this._form);
 			
 			for (var i in this.sfinputs){
@@ -1309,7 +1333,7 @@
 			}
 			
 			// user returned false to cancel submit
-            if (false === settings.onSubmit.call(this,this._form)){               
+            if (false === settings.onSubmit.call(this,this,this._form)){               
                 return false;
             }
 			
