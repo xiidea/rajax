@@ -743,7 +743,6 @@
                 var isvalid=self._validateType(file,dniedExt,allowedExt);
 
                 if(isvalid!==true){
-                    self._clearInput();
                     if (true !== self._settings.onDenied.call(self, file,ext)){
                         var alert_str="";
                         if(isvalid==='denied'){	//Restricted file selected
@@ -761,12 +760,10 @@
                 }
 
                 if (false === self._settings.onAccept.call(self, file, ext)){
-                    self._clearInput();
                     return;
                 }
 
                 if (false === self._settings.onChange.call(self, file, ext)){
-                    self._clearInput();
                     return;
                 }
 
