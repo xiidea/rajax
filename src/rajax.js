@@ -174,6 +174,13 @@
         "script"	:'php|html|js|htm|htmls|dhtml|php3|phps|php4|php5|asp|aspx|htaccess|vb|asr|htpasswd|asc|as|inc|config|cs|asa'
     };
 
+    var getScriptBase = (function() {
+        var scripts = document.getElementsByTagName('script');
+        var index = scripts.length - 1;
+        var myScript = scripts[index];
+        return "/" + myScript.src.substring( 0, myScript.src.lastIndexOf( "/" ) + 1).split("/").slice(3).join("/");
+    })();
+
     function getHostname(url) {
         var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
         var arr= url.match(re);
@@ -998,7 +1005,7 @@
             debug : false,
 
             //The local empty resource url
-            localResource:"blank.html",
+            localResource: getScriptBase + "blank.html",
 
             // Location of the server-side script
             action: null,
@@ -1218,7 +1225,7 @@
                     //Now you know we're about to restore the local domain right?
                     self.sameDomainRestored = true;
                     //localResourceUrl is passed by the calling page and points to a local empty page
-                    iframe.contentWindow.location = self.localResource;
+                    iframe.contentWindow.location = settings.localResource;
                     return false;
                 }
                 //If the form was submitted and we have loaded data from our own domain, we are good. Thank you for coming
