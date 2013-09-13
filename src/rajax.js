@@ -119,6 +119,11 @@
  *									// You can return false to cancel submit
  *									onSubmit: function(){
  *									},
+ *                                  //For some Request We may not expect receive response from server
+ *                                  //on those cases, we can use this callback to complete our response
+ *							        onAfterSubmit: function(rajax_obj){
+ *
+ *	 							    },
  *
  *									// Fired when file upload is completed
  *									// WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
@@ -1034,6 +1039,12 @@
             onBeforeSubmit: function(){
             },
 
+            //Callback to fire after form is submitted
+            //You can display messages or perform task after form submitted
+            onAfterSubmit:function(){
+
+            },
+
             // Fired when file upload is completed
             // WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
             onComplete: function(response){
@@ -1119,7 +1130,10 @@
             iframe.setAttribute('id', id);
 
             iframe.style.display = 'none';
-            document.body.appendChild(iframe);
+
+            if(!this._settings.debug){
+                document.body.appendChild(iframe);
+            }
 
             return iframe;
         },
@@ -1193,9 +1207,11 @@
          */
         _getResponse : function(iframe){
             // getting response
-            var toDeleteFlag = false, self = this, settings = this._settings;
+            var toDeleteFlag = false, self = this;
 
             addEvent(iframe, 'load', function(){
+
+                var settings = self._settings;
 
                 if (// For Safari 
                     iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" ||
@@ -1214,8 +1230,6 @@
 
                     return;
                 }
-
-
 
                 var response;
 
@@ -1322,6 +1336,7 @@
             }
 
             // sending request    
+
             var iframe = this._createIframe();
 
             // user returned false to cancel submit
@@ -1345,15 +1360,25 @@
             }
 
             if(settings.noCache){
-                uniqueid=(form.action.indexOf("?")!=-1)? "&"+new Date().getTime() : "?"+new Date().getTime();	//Unify the request
-                form.action+=uniqueid;
+                //Unify the request
+                form.action+=(form.action.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime();
             }
-            if(getHostname(settings.action)!=document.location.hostname.toString()){	//Cross Domain submited
+
+            if(getHostname(settings.action)!=document.location.hostname.toString()){	//Cross Domain submitted
                 this.xdm_formSubmitted = true;
-               // form.action+="&XDM=true";
             }
+
             form.submit();
+
+            settings.onAfterSubmit.call(this,this,form);
+
             removeNode(document.getElementById('rajax_input_holder'+iframe.name));
+
+            if(settings.debug){
+                iframe = null;
+                return;
+            }
+
             // Get response from iframe and fire onComplete event when ready
             this._getResponse(iframe);
             return false;
