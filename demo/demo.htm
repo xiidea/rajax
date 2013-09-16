@@ -74,12 +74,27 @@
  								{
 								// responseType:'json',
 									//data:
+                                    finputs:{
+                                        profile_pic:{
+                                            button:'image_upload2',
+                                            allowedType:'image',
+                                            selectedFileLabel:'selected_img_file2'
+                                        },
+                                        doc_attachment:{
+                                            button:'doc_upload2',
+                                            allowedType:'document',
+                                            selectedFileLabel:'selected_doc_file2',
+                                            multipleFile:true,
+                                            selectedFileClass:'selectedFileClass'
+                                        }
+                                    },
  									action:'post.php',
 									onBeforeSubmit:function(ref){
 										ref.setData({'username':'roni','password':'123456'});
 										return true;
 									},
- 									onComplete:function(response){
+ 									onComplete:function(response, ref){
+                                        ref.clear();
 										document.getElementById('output').innerHTML=response;
  									}	
  							});

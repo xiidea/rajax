@@ -23,8 +23,8 @@
  * @param1={Object} reference for a button which will be used as file input
  * @URL={string} the script url
  *
- *	var rajax_obj=	new rajax({@param1},
- *								{
+ *    var rajax_obj=    new rajax({@param1},
+ *                                {
  *	 								//Styled File Inputs
  *									finputs:{
  *												{@param2}:{
@@ -91,53 +91,53 @@
  *														//It will helpful to show error message as per user wish
  *														showMessage:null
  *													}
- *												}
- *										},
+ *                                                }
+ *                                        },
  *
- * 									//Set to true for debugging server side out put. The
- *									//request will be submmitted in blank target
- *									debug : false,
+ *                                    //Set to true for debugging server side out put. The
+ *                                    //request will be submmitted in blank target
+ *                                    debug : false,
  *
- *									// Location of the server-side script,
- *									// if not provided it will use the form action value
- *									action: {@URL},
+ *                                    // Location of the server-side script,
+ *                                    // if not provided it will use the form action value
+ *                                    action: {@URL},
  *
- *									// Additional data to send as {name:value} pair
- *									data: {},
+ *                                    // Additional data to send as {name:value} pair
+ *                                    data: {},
  *
- *									// The type of data that you're expecting back from the server.
- *									// html and xml are detected automatically.
- *									// Only useful when you are using json data as a response.
- *									// Set to "json" in that case.
- *									responseType: false,
+ *                                    // The type of data that you're expecting back from the server.
+ *                                    // html and xml are detected automatically.
+ *                                    // Only useful when you are using json data as a response.
+ *                                    // Set to "json" in that case.
+ *                                    responseType: false,
  *
- *									//Auto submitting form means submit trigger uppon form submit
- *									Default disable, make it safe to work with other library
- *									autoSubmit:false,
+ *                                    //Auto submitting form means submit trigger uppon form submit
+ *                                    Default disable, make it safe to work with other library
+ *                                    autoSubmit:false,
  *
- *									// Callback to fire before form is submitted
- *									// You can return false to cancel submit
- *									onSubmit: function(){
+ *                                    // Callback to fire before form is submitted
+ *                                    // You can return false to cancel submit
+ *                                    onSubmit: function(){
  *									},
  *                                  //For some Request We may not expect receive response from server
  *                                  //on those cases, we can use this callback to complete our response
- *							        onAfterSubmit: function(rajax_obj){
+ *                                    onAfterSubmit: function(rajax_obj){
  *
  *	 							    },
  *
- *									// Fired when file upload is completed
- *									// WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
- *									onComplete: function(response){
+ *                                    // Fired when file upload is completed
+ *                                    // WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
+ *                                    onComplete: function(response){
  *									}
- *							});
+ *                            });
  * //Triger the submit event manually
  * rajax_obj.post();
  *
  *-------------
  * example
  *---------------
- *	var rajax_obj=	new rajax(form,
- *								{
+ *    var rajax_obj=    new rajax(form,
+ *                                {
  *								 finputs:{
  *											profile_pic1:{
  *													button:'file_uploader1',
@@ -155,7 +155,7 @@
  *									}
  *							});
  *
- *	rajax_obj.post();	//Triger submitting the form
+ *    rajax_obj.post();    //Triger submitting the form
  *
  *  var sainput= new SFileInput('doc_file',{
  *													button:'doc_upload1',
@@ -166,72 +166,73 @@
  *											});
  */
 
-(function(){
+(function () {
     //Some Private variable that should not accessible from outside
-    var fileTypeExt={
-        "image"		:'jpg|jpeg|gif|png|bmp|pct|psd|psp|thm|tif|ai|drw|dxf|eps|ps|svg|3dm|dwg|pln',
-        "document"	:'doc|pdf|docx|txt|log|msg|pages|rtf|wpd|wps|indd|qxd|qxp',
-        "data"		:'123|accdb|csv|dat|db|dll|mdb|pps|ppt|pptx|sdb|sdf|sql|vcf|wks|xls|xlsx|xml',
-        "archive"	:'zip|rar|tar|tga|7z|deb|gz|pkg|sit|sitx|zipx|cab|gzip|uue|arj',
-        "audio"		:'wma|mp3|amr|wav|aif|iff|m3u|m4a|mid|mpa|ra',
-        "video"		:'mov|mpeg|mpg|3gp|3g2|vob|flv|swf|asx|asf|rm',
-        "font"		:'fnt|fon|otf|ttf',
-        "script"	:'php|html|js|htm|htmls|dhtml|php3|phps|php4|php5|asp|aspx|htaccess|vb|asr|htpasswd|asc|as|inc|config|cs|asa'
+    var fileTypeExt = {
+        "image": 'jpg|jpeg|gif|png|bmp|pct|psd|psp|thm|tif|ai|drw|dxf|eps|ps|svg|3dm|dwg|pln',
+        "document": 'doc|pdf|docx|txt|log|msg|pages|rtf|wpd|wps|indd|qxd|qxp',
+        "data": '123|accdb|csv|dat|db|dll|mdb|pps|ppt|pptx|sdb|sdf|sql|vcf|wks|xls|xlsx|xml',
+        "archive": 'zip|rar|tar|tga|7z|deb|gz|pkg|sit|sitx|zipx|cab|gzip|uue|arj',
+        "audio": 'wma|mp3|amr|wav|aif|iff|m3u|m4a|mid|mpa|ra',
+        "video": 'mov|mpeg|mpg|3gp|3g2|vob|flv|swf|asx|asf|rm',
+        "font": 'fnt|fon|otf|ttf',
+        "script": 'php|html|js|htm|htmls|dhtml|php3|phps|php4|php5|asp|aspx|htaccess|vb|asr|htpasswd|asc|as|inc|config|cs|asa'
     };
 
-    var getScriptBase = (function() {
+    var getScriptBase = (function () {
         var scripts = document.getElementsByTagName('script');
         var index = scripts.length - 1;
         var myScript = scripts[index];
-        return "/" + myScript.src.substring( 0, myScript.src.lastIndexOf( "/" ) + 1).split("/").slice(3).join("/");
+        return "/" + myScript.src.substring(0, myScript.src.lastIndexOf("/") + 1).split("/").slice(3).join("/");
     })();
 
     function getHostname(url) {
         var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
-        var arr= url.match(re);
-        return arr?arr[1].toString():document.location.hostname;
+        var arr = url.match(re);
+        return arr ? arr[1].toString() : document.location.hostname;
     }
 
-    function returnJSON(response){
-        if(response){
+    function returnJSON(response) {
+        if (response) {
             return eval("(" + response + ")");
-        }else{
+        } else {
             return {};
         }
     }
 
-    function getExtList(type){
-        if(type=='' || type=='custom')
+    function getExtList(type) {
+        if (type == '' || type == 'custom')
             return '';
-        var extArr=type.split('|');
-        var s=new Array();
-        for(i in extArr){
-            s[i]=fileTypeExt[extArr[i]];
+        var extArr = type.split('|');
+        var s = new Array();
+        for (var i in extArr) {
+            s[i] = fileTypeExt[extArr[i]];
         }
         return s.join('|');
     }
 
     function isIn(value, param) {
-        param =param.replace(/,/g, '|');
+        param = param.replace(/,/g, '|');
         return value.match(new RegExp(".(" + param + ")$", "i"));
     }
 
     function stopDefault(e) {
-        if (e &&e.preventDefault) e.preventDefault();
+        if (e && e.preventDefault) e.preventDefault();
         else if (window.event && window.event.returnValue)
-            window.eventReturnValue = false;
+            window.event.returnValue = false;
     }
+
     /**
      * Attaches event to a dom element.
      * @param {Element} el
      * @param type event name
      * @param fn callback This refers to the passed element
      */
-    function addEvent(el, type, fn){
+    function addEvent(el, type, fn) {
         if (el.addEventListener) {
             el.addEventListener(type, fn, false);
         } else if (el.attachEvent) {
-            el.attachEvent('on' + type, function(){
+            el.attachEvent('on' + type, function () {
                 fn.call(el);
             });
         } else {
@@ -249,11 +250,11 @@
      *
      * @param fn callback This refers to the passed element
      */
-    function addResizeEvent(fn){
+    function addResizeEvent(fn) {
         var timeout;
 
-        addEvent(window, 'resize', function(){
-            if (timeout){
+        addEvent(window, 'resize', function () {
+            if (timeout) {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(fn, 100);
@@ -262,10 +263,10 @@
 
     // Needs more testing, will be rewriten for next version        
     // getOffset function copied from jQuery lib (http://jquery.com/)
-    if (document.documentElement.getBoundingClientRect){
+    if (document.documentElement.getBoundingClientRect) {
         // Get Offset using getBoundingClientRect
         // http://ejohn.org/blog/getboundingclientrect-is-awesome/
-        var getOffset = function(el){
+        var getOffset = function (el) {
             var box = el.getBoundingClientRect();
             var doc = el.ownerDocument;
             var body = doc.body;
@@ -295,7 +296,7 @@
         };
     } else {
         // Get offset adding all offsets 
-        var getOffset = function(el){
+        var getOffset = function (el) {
             var top = 0, left = 0;
             do {
                 top += el.offsetTop || 0;
@@ -316,7 +317,7 @@
      * @param {Element} el
      * @return {Object} Contains left, top, right,bottom
      */
-    function getBox(el){
+    function getBox(el) {
         var left, right, top, bottom;
         var offset = getOffset(el);
         left = offset.left;
@@ -339,7 +340,7 @@
      * @param {Element} el
      * @param {Object} styles
      */
-    function addStyles(el, styles){
+    function addStyles(el, styles) {
         for (var name in styles) {
             if (styles.hasOwnProperty(name)) {
                 el.style[name] = styles[name];
@@ -354,15 +355,15 @@
      * @param {Element} from
      * @param {Element} to
      */
-    function copyLayout(from, to){
+    function copyLayout(from, to) {
         var box = getBox(from);
 
         addStyles(to, {
             position: 'absolute',
-            left : box.left + 'px',
-            top : box.top + 'px',
-            width : from.offsetWidth + 'px',
-            height : from.offsetHeight + 'px'
+            left: box.left + 'px',
+            top: box.top + 'px',
+            width: from.offsetWidth + 'px',
+            height: from.offsetHeight + 'px'
         });
     }
 
@@ -370,9 +371,9 @@
      * Creates and returns element from html chunk
      * Uses innerHTML to create an element
      */
-    var toElement = (function(){
+    var toElement = (function () {
         var div = document.createElement('div');
-        return function(html){
+        return function (html) {
             div.innerHTML = html;
             var el = div.firstChild;
             return div.removeChild(el);
@@ -383,9 +384,9 @@
      * Function generates unique id
      * @return unique id
      */
-    var getUID = (function(){
+    var getUID = (function () {
         var id = 0;
-        return function(){
+        return function () {
             return 'RAjaxPost' + id++;
         };
     })();
@@ -396,12 +397,12 @@
      * @param {element} The dom element reference (dom element/jquery element/element id)
      * @return {element object}
      */
-    function GetElement(el){
-        if (el.jquery){
+    function GetElement(el) {
+        if (el.jquery) {
             // jQuery object was passed
             el = el[0];
         } else if (typeof el == "string") {
-            if (/^#.*/.test(el)){
+            if (/^#.*/.test(el)) {
                 // If jQuery user passes #elementId don't break it					
                 el = el.slice(1);
             }
@@ -419,23 +420,23 @@
      * @param {int} depth of search dafault 0
      * @return filename
      */
-    function GetParentTag(el,tag,depth){
-        var el=GetElement(el);
-        if(!el.parentNode)				//return null if parent node is not exist
+    function GetParentTag(el, tag, depth) {
+        var el = GetElement(el);
+        if (!el.parentNode)				//return null if parent node is not exist
             return null;
-        if(typeof tag=='undefined')		//return parent node if node type is not defined
+        if (typeof tag == 'undefined')		//return parent node if node type is not defined
             return el.parentNode;
 
-        var c=depth || 0;
-        if(el.parentNode.nodeName.toLowerCase()==tag.toLowerCase() && c==0){
+        var c = depth || 0;
+        if (el.parentNode.nodeName.toLowerCase() == tag.toLowerCase() && c == 0) {
             return el.parentNode;
         }
-        else if(el.parentNode.nodeName.toLowerCase()==tag.toLowerCase()){
+        else if (el.parentNode.nodeName.toLowerCase() == tag.toLowerCase()) {
             c--;
-            return GetParentTag(el.parentNode,tag.toLowerCase(),c);
+            return GetParentTag(el.parentNode, tag.toLowerCase(), c);
         }
-        else{
-            return GetParentTag(el.parentNode,tag.toLowerCase(),c);
+        else {
+            return GetParentTag(el.parentNode, tag.toLowerCase(), c);
         }
     }
 
@@ -444,7 +445,7 @@
      * @param {String} file path to file
      * @return filename
      */
-    function fileFromPath(file){
+    function fileFromPath(file) {
         return file.replace(/.*(\/|\\)/, "");
     }
 
@@ -453,26 +454,28 @@
      * @param {String} file name
      * @return file extenstion
      */
-    function getExt(file){
+    function getExt(file) {
         return (-1 !== file.indexOf('.')) ? file.replace(/.*[.]/, '') : '';
     }
 
-    function hasClass(el, name){
+    function hasClass(el, name) {
         var re = new RegExp('\\b' + name + '\\b');
         return re.test(el.className);
     }
-    function addClass(el, name){
-        if ( ! hasClass(el, name)){
+
+    function addClass(el, name) {
+        if (!hasClass(el, name)) {
             el.className += ' ' + name;
         }
     }
-    function removeClass(el, name){
+
+    function removeClass(el, name) {
         var re = new RegExp('\\b' + name + '\\b');
         el.className = el.className.replace(re, '');
     }
 
 
-    function removeNode(el){
+    function removeNode(el) {
         el.parentNode.removeChild(el);
     }
 
@@ -484,20 +487,23 @@
      * upload button. Tested dimentions up to 500x500px
      * @param {Object} options See defaults below.
      */
-    window.SFileInput = function(name,options){
+    window.SFileInput = function (name, options) {
         this._settings = {
             //Styled Button Reference
-            button:'',
+            button: '',
+
+            //Target form if the input is out of any form element
+            targetForm: false,
 
             //Denied file type(s)	[deny has more priority then acceptence]
-            deniedType:'script',
+            deniedType: 'script',
             //Allowed file type(s)
-            allowedType:'',
+            allowedType: '',
 
             //Denied extention(s) used only if deniedType is 'custom'
-            denideExt:'',
+            denideExt: '',
             //Allowed extention(s) used only if allowedType is 'custom'
-            allowedExt:'',
+            allowedExt: '',
 
             // Class applied to button when mouse is hovered
             hoverClass: 'hover',
@@ -507,98 +513,93 @@
             disabledClass: 'disabled',
 
             //allow multiple file upload
-            multipleFile:false,
+            multipleFile: false,
 
             //Set it true if the input field is a must field
-            required:false,
+            required: false,
 
             //Display Selected File Name, set false, if you like to handle your self
             showFileName:true,
 
             // Id Of selected file name
-            //Usefull when you like to display file name in your own element
+            //Useful when you like to display file name in your own element
             selectedFileLabel: '',
 
             // Class applied to selected file name  element
             selectedFileClass: 'selectedFileClass',
 
             // Class applied to selected file name  element
-            multiInputRemoveClass:'remove',
+            multiInputRemoveClass: 'remove',
 
             //message to show on no selected file error
-            nofileMsg:'No file selected',
+            nofileMsg: 'No file selected',
 
             // When The file input reseted or the form reseted
-            onClear:function(file){
+            onClear: function (file) {
             },
 
             // When user selects a file, useful with Custom validation
             // You can return false to cancel upload			
-            onChange: function(file, extension){
+            onChange: function (file, extension) {
             },
 
             //When user select any denied File
             //You can process file name and extention to view custom message.
             //Return True to override native alert message
-            onDenied:function(file,extention){
+            onDenied: function (file, extention) {
             },
 
             //When user select any acceptable File
             //You can process with file name and extention
             //Return false to cancel selection
             // Most of the time the function is not needed
-            onAccept:function(file,extention){
+            onAccept: function (file, extention) {
 
             },
 
             //It will helpful to show error message as per user wish
-            showMessage:null
+            showMessage: null
 
         };
 
         // Merge the users options with our defaults
         for (var i in options) {
-            if (options.hasOwnProperty(i)){
+            if (options.hasOwnProperty(i)) {
                 this._settings[i] = options[i];
             }
         }
 
-        if(this._settings.multipleFile==true){
-            this._settings.name=name+"[]";
+        if (this._settings.multipleFile == true) {
+            this._settings.name = name + "[]";
             //this._multiInput=new Array();
-        }else{
-            this._settings.name=name;
+        } else {
+            this._settings.name = name;
         }
 
 
         var button = GetElement(this._settings['button']);
 
-        if ( ! button || button.nodeType !== 1){
+        if (!button || button.nodeType !== 1) {
             throw new Error("Please make sure that you're passing a valid element");
         }
 
         //denied type not changed but extention provided, so set the type to custom
-        if(this._settings.denideExt!='' && this._settings.deniedType=='script'){
-            this._settings.deniedType='custom';
+        if (this._settings.denideExt != '' && this._settings.deniedType == 'script') {
+            this._settings.deniedType = 'custom';
         }
         //allowed type not given but allowed extention given, set the type to custom
-        if(this._settings.allowedExt!='' && this._settings.allowedType==''){
-            this._settings.allowedType='custom';
+        if (this._settings.allowedExt != '' && this._settings.allowedType == '') {
+            this._settings.allowedType = 'custom';
         }
 
 
-        if ( button.nodeName.toUpperCase() == 'A'){
+        if (button.nodeName.toUpperCase() == 'A') {
             // disable link                       
-            addEvent(button, 'click', function(e){
-                if (e && e.preventDefault){
-                    e.preventDefault();
-                } else if (window.event){
-                    window.event.returnValue = false;
-                }
-            });
+            addEvent(button, 'click', stopDefault);
         }
         //Default no file selected
-        this.fileselected=0;
+        this.fileselected = 0;
+        this.inputCreated = 0;
 
         // DOM element
         this._button = button;
@@ -612,24 +613,21 @@
         this.enable();
 
         this._rerouteClicks();
-
-        var form =GetParentTag(this._button,'form');// $(this._button).parents('form:first');
-        var self=this;
     };
 
     // assigning methods to our class
     SFileInput.prototype = {
-        disable: function(){
+        disable: function () {
             addClass(this._button, this._settings.disabledClass);
             this._disabled = true;
 
             var nodeName = this._button.nodeName.toUpperCase();
-            if (nodeName == 'INPUT' || nodeName == 'BUTTON'){
+            if (nodeName == 'INPUT' || nodeName == 'BUTTON') {
                 this._button.setAttribute('disabled', 'disabled');
             }
 
             // hide input
-            if (this._input){
+            if (this._input) {
                 if (this._input.parentNode) {
                     // We use visibility instead of display to fix problem with Safari 4
                     // The problem is that the value of input doesn't change if it 
@@ -638,18 +636,18 @@
                 }
             }
         },
-        enable: function(){
+        enable: function () {
             removeClass(this._button, this._settings.disabledClass);
             this._button.removeAttribute('disabled');
             this._disabled = false;
 
         },
 
-        _showMessage:function(msg){
-            var self=this
-            if(self._settings.showMessage){
-                self._settings.showMessage.call(self,msg)
-            }else{
+        _showMessage: function (msg) {
+            var self = this
+            if (self._settings.showMessage) {
+                self._settings.showMessage.call(self, msg)
+            } else {
                 alert(msg);
             }
         },
@@ -659,9 +657,10 @@
          * Create Label For file name
          * that will created after form element
          */
-        _createLabel:function(){
+        _createLabel: function () {
             var self = this;
             var label = document.createElement("label");
+            label.setAttribute('id', 'sfinput-label-id-for-'+self._input.name);
             self._button.parentNode.insertBefore(label, self._button.nextSibling);
             return label;
         },
@@ -670,16 +669,17 @@
          * Create Label For multiple file input
          * that will created after form element
          */
-        _createMultipleLabel:function(){
-            var self = this;
-            if(self._label.childNodes.length>0){
-                var ol=self._label.childNodes.item(0);
-            }else{
-                var ol=document.createElement("ol");
+        _createMultipleLabel: function () {
+            var self = this, ol;
+            if (self._label.childNodes.length > 0) {
+                ol = self._label.childNodes.item(0);
+            } else {
+                ol = document.createElement("ol");
                 self._label.appendChild(ol);
             }
             //now create the list item
             var li = document.createElement("li");
+            li.setAttribute('id', 'sf-input-label-mid-for-' + self.inputCreated + self._input.name)
             ol.appendChild(li);
             return li;
         },
@@ -690,7 +690,7 @@
          * that will hover above the button
          * <div><input type='file' /></div>
          */
-        _createInput: function(){
+        _createInput: function () {
             var self = this;
 
             var input = document.createElement("input");
@@ -699,47 +699,47 @@
 
 
             addStyles(input, {
-                'position' : 'absolute',
+                'position': 'absolute',
                 // in Opera only 'browse' button
                 // is clickable and it is located at
                 // the right side of the input
-                'right' : 0,
-                'margin' : 0,
-                'padding' : 0,
-                'fontSize' : '480px',
+                'right': 0,
+                'margin': 0,
+                'padding': 0,
+                'fontSize': '480px',
                 // in Firefox if font-family is set to
                 // 'inherit' the input doesn't work
-                'fontFamily' : 'sans-serif',
-                'cursor' : 'pointer'
+                'fontFamily': 'sans-serif',
+                'cursor': 'pointer'
             });
 
             var div = document.createElement("div");
             addStyles(div, {
-                'display' : 'block',
-                'position' : 'absolute',
-                'overflow' : 'hidden',
-                'margin' : 0,
-                'padding' : 0,
-                'opacity' : 0,
+                'display': 'block',
+                'position': 'absolute',
+                'overflow': 'hidden',
+                'margin': 0,
+                'padding': 0,
+                'opacity': 0,
                 // Make sure browse button is in the right side
                 // in Internet Explorer
-                'direction' : 'ltr',
+                'direction': 'ltr',
                 //Max zIndex supported by Opera 9.0-9.2
                 'zIndex': 2147483583
             });
 
             // Make sure that element opacity exists.
             // Otherwise use IE filter            
-            if ( div.style.opacity !== "0") {
-                if (typeof(div.filters) == 'undefined'){
+            if (div.style.opacity !== "0") {
+                if (typeof(div.filters) == 'undefined') {
                     throw new Error('Opacity not supported by the browser');
                 }
                 div.style.filter = "alpha(opacity=0)";
             }
 
-            addEvent(input, 'change', function(){
+            addEvent(input, 'change', function () {
 
-                if ( ! input || input.value === ''){
+                if (!input || input.value === '') {
                     return;
                 }
 
@@ -749,21 +749,21 @@
                 var ext = getExt(file);
 
                 //Check if the file type is allowed or not
-                var dniedExt=(self._settings.deniedType=='custom') ? self._settings.denideExt : getExtList(self._settings.deniedType);
-                var allowedExt=(self._settings.allowedType=='custom') ? self._settings.allowedExt : getExtList(self._settings.allowedType);
+                var dniedExt = (self._settings.deniedType == 'custom') ? self._settings.denideExt : getExtList(self._settings.deniedType);
+                var allowedExt = (self._settings.allowedType == 'custom') ? self._settings.allowedExt : getExtList(self._settings.allowedType);
                 //alert(self._settings.deniedType)
-                var isvalid=self._validateType(file,dniedExt,allowedExt);
+                var isvalid = self._validateType(file, dniedExt, allowedExt);
 
-                if(isvalid!==true){
-                    if (true !== self._settings.onDenied.call(self, file,ext)){
-                        var alert_str="";
-                        if(isvalid==='denied'){	//Restricted file selected
-                            alert_str="*."+ext+" file is not allowed";
-                        }else{
-                            if(self._settings.allowedType=='custom'){
-                                alert_str="only (*."+allowedExt.split("|").join(", *.")+") extention(s) are allowed";
-                            }else{
-                                alert_str="only "+self._settings.allowedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1')+" file(s) are allowed";
+                if (isvalid !== true) {
+                    if (true !== self._settings.onDenied.call(self, file, ext)) {
+                        var alert_str = "";
+                        if (isvalid === 'denied') {	//Restricted file selected
+                            alert_str = "*." + ext + " file is not allowed";
+                        } else {
+                            if (self._settings.allowedType == 'custom') {
+                                alert_str = "only (*." + allowedExt.split("|").join(", *.") + ") extention(s) are allowed";
+                            } else {
+                                alert_str = "only " + self._settings.allowedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1') + " file(s) are allowed";
                             }
                         }
                         self._showMessage(alert_str);
@@ -771,49 +771,60 @@
                     return;
                 }
 
-                if (false === self._settings.onAccept.call(self, file, ext)){
+                if (false === self._settings.onAccept.call(self, file, ext)) {
                     return;
                 }
 
-                if (false === self._settings.onChange.call(self, file, ext)){
+                if (false === self._settings.onChange.call(self, file, ext)) {
                     return;
                 }
 
 
-                if( self._settings.showFileName){
-                    if(!self._label){
-                        var label=GetElement(self._settings.selectedFileLabel);
-                        if(!label){
-                            label=self._createLabel()
+                if (self._settings.showFileName) {
+                    if (!self._label) {
+                        var label = GetElement(self._settings.selectedFileLabel);
+                        if (!label) {
+                            label = self._createLabel()
                         }
 
-                        if(self._settings.selectedFileClass!=""){
-                            addClass(label,self._settings.selectedFileClass);
-                        }else{
-                            addStyles(label,{
-                                'marginLeft':'10px'
+                        if (self._settings.selectedFileClass != "") {
+                            addClass(label, self._settings.selectedFileClass);
+                        } else {
+                            addStyles(label, {
+                                'marginLeft': '10px'
                             });
                         }
-                        self._label=label;
+                        self._label = label;
                     }
+                    var inputMoveTo;
                     removeClass(self._button, self._settings.hoverClass);
-                    if(self._settings.multipleFile==true){	//Need to create new input entry
-                        var multiInput=self._createMultipleLabel();
-                        multiInput.innerHTML=self._formatFileName(file);
-                        self._moveImput(multiInput);
+                    if (self._settings.multipleFile == true) {	//Need to create new input entry
+                        var multiInput = self._createMultipleLabel();
+                        multiInput.innerHTML = self._formatFileName(file);
+                        inputMoveTo = multiInput;
+                    } else {
+                        self._label.innerHTML = self._formatFileName(file);
+                        inputMoveTo = self._label;
+                    }
+
+                    if(!self._parentForm){
+                        var dummyDiv = GetElement('dummy-'+inputMoveTo.id);
+                        if(dummyDiv){
+                            removeNode(dummyDiv);
+                        }
+                        self._moveInput(self._form, inputMoveTo);
                     }else{
-                        self._label.innerHTML=self._formatFileName(file);
-                        self._moveImput(self._label);
+                        self._moveInput(inputMoveTo, inputMoveTo);
                     }
                 }
 
             });
 
-            addEvent(input, 'mouseover', function(){
+            addEvent(input, 'mouseover', function () {
                 addClass(self._button, self._settings.hoverClass);
             });
 
-            addEvent(input, 'mouseout', function(){
+            addEvent(input, 'mouseout', function () {
                 removeClass(self._button, self._settings.hoverClass);
                 removeClass(self._button, self._settings.focusClass);
 
@@ -825,28 +836,31 @@
                 }
             });
 
-            addEvent(input, 'focus', function(){
+            addEvent(input, 'focus', function () {
                 addClass(self._button, self._settings.focusClass);
             });
 
-            addEvent(input, 'blur', function(){
+            addEvent(input, 'blur', function () {
                 removeClass(self._button, self._settings.focusClass);
             });
 
 
             div.appendChild(input);
 
-            var form =GetParentTag(this._button,'form');// $(this._button).parents('form:first');
+
+            this._parentForm = GetParentTag(this._button, 'form');
+
+            var form = self._settings.targetForm || this._parentForm
 
             //To do, if form is not found then create a form element to handle the submit process
-            if(!form){	//for now If form not found throw error
+            if (!form) {	//for now If form not found throw error
                 throw new Error('The input is without a form element');
             }
             //$(form).unbind('reset').bind('reset', function () {
             //self._clearInput();
             //});
 
-            addEvent(form, 'reset', function(){
+            addEvent(form, 'reset', function () {
                 self._clearInput();
             });
 
@@ -859,65 +873,73 @@
             this._input = input;
         },
 
-        _moveImput:function(el){
-            var createRemove=createRemove || true;
-            var el=GetElement(el);
-            var self=this;
-            if(self._input){
+        _moveInput: function (el, wrapper_el) {
+            var el = GetElement(el);
+            var self = this;
+            if (self._input) {
                 //alert("everything ok "+self._input.id)
-                self._input.onChange="";
-                self._input.parentNode.onMouseover="";
-                addStyles(self._input.parentNode,{
-                    "visibility":'hidden',
-                    'width':"0px",
-                    'height':"0px",
-                    "left":0,
-                    "top":0
+                self._input.onChange = "";
+                self._input.parentNode.onMouseover = "";
+                addStyles(self._input.parentNode, {
+                    "visibility": 'hidden',
+                    'width': "0px",
+                    'height': "0px",
+                    "left": 0,
+                    "top": 0
                 });
-                var tempinput=self._input.parentNode;
+                var tempinput = self._input.parentNode;
+
+                tempinput.setAttribute('id', 'dummy-'+wrapper_el.id)
                 // assuming following structure
                 // div -> input type='file'
                 removeNode(self._input.parentNode);
-                if(self._settings.multipleFile){
-                    self._createRemoveButton(el);
+                if (self._settings.multipleFile) {
+                    self._createRemoveButton(wrapper_el, tempinput);
                 }
 
                 el.appendChild(tempinput);
                 //alert(el.nodeName)
-                this.fileselected++;
-                this._input = null;
-                this._createInput();
-            }else{
-                throw new Error('somthing gone wrong!!');
+                self.fileselected++;
+                self.inputCreated++;
+                self._input = null;
+                self._createInput();
+            } else {
+                throw new Error('something gone wrong!!');
             }
 
         },
 
-        _createRemoveButton:function(el){
-            var self=this;
+        _createRemoveButton: function (el, temp) {
+            var self = this;
             var remove = document.createElement("a");
             addClass(remove, self._settings.multiInputRemoveClass);
-            remove.innerHTML="<span>x</span>";
+            remove.innerHTML = "<span>x</span>";
 
-            addEvent(remove, 'click', function(){
-                self.fileselected=self.fileselected-1;
+            addEvent(remove, 'click', function () {
+                self.fileselected = self.fileselected - 1;
+                removeNode(temp);
                 removeNode(this.parentNode);
             });
 
             el.appendChild(remove);
         },
 
-        _clearInput : function(){
-            var self=this;
-            if (!this._input){
+        _clearInput: function () {
+            var self = this;
+            if (!self._input) {
                 return;
             }
-            self._input.fileselected=0;
-            this._settings.onClear.call(self)
+            self._input.fileselected = 0;
+            self._input.inputCreated = 0;
+            self._settings.onClear.call(self)
             // this._input.value = ''; Doesn't work in IE6
-            if(this._label){
-                this._label.innerHTML="";
+
+            if (self._label) {
+                self._label.innerHTML = "";
+                var dummyContainer = GetElement('dummy-' + this._label.id);
+                dummyContainer && removeNode(dummyContainer);
             }
+
             removeNode(this._input.parentNode);
             this._input = null;
             this._createInput();
@@ -926,19 +948,19 @@
             removeClass(this._button, this._settings.focusClass);
         },
 
-        validate:function(){
-            var self=this;
-            if(!self._validate()){
+        validate: function () {
+            var self = this;
+            if (!self._validate()) {
                 self._showMessage(self._settings.nofileMsg);
                 return false;
             }
             return true;
         },
 
-        _validate:function(){
-            var self=this;
-            if(self._settings.required){	//Special checking required
-                return (self.fileselected && self.fileselected>0)
+        _validate: function () {
+            var self = this;
+            if (self._settings.required) {	//Special checking required
+                return (self.fileselected && self.fileselected > 0)
             }
             return true;
         },
@@ -946,44 +968,43 @@
         /**
          * Function to check if file type is acceptable or not
          */
-        _validateType:function(file,dniedExt,allowedExt){
+        _validateType: function (file, dniedExt, allowedExt) {
             //First check for denied
 
-            if(dniedExt!=""){
-                if(isIn(file,dniedExt)){	//Nothing to go for it is / hand over control to user
+            if (dniedExt != "") {
+                if (isIn(file, dniedExt)) {	//Nothing to go for it is / hand over control to user
                     return 'denied';
                 }
-            }else if(allowedExt==""){		//No filter used allow everything
+            } else if (allowedExt == "") {		//No filter used allow everything
                 return true;
             }
 
             //We come here that means we are not denied.
             //alert(allowedExt)
-            if(allowedExt!=""){
-                return (false || isIn(file,allowedExt)) && true;
+            if (allowedExt != "") {
+                return (false || isIn(file, allowedExt)) && true;
             }
             return true;
         },
-
 
 
         /**
          * Function makes sure that when user clicks upload button,
          * the this._input is clicked instead
          */
-        _rerouteClicks: function(){
+        _rerouteClicks: function () {
             var self = this;
 
             // IE will later display 'access denied' error
             // if you use using self._input.click()
             // other browsers just ignore click()
 
-            addEvent(self._button, 'mouseover', function(){
-                if (self._disabled){
+            addEvent(self._button, 'mouseover', function () {
+                if (self._disabled) {
                     return;
                 }
 
-                if ( ! self._input){
+                if (!self._input) {
                     self._createInput();
                 }
 
@@ -993,8 +1014,8 @@
             });
         },
 
-        _formatFileName: function(name){
-            if (name.length > 33){
+        _formatFileName: function (name) {
+            if (name.length > 33) {
                 name = name.slice(0, 19) + '...' + name.slice(-13);
             }
             return name;
@@ -1003,11 +1024,11 @@
     };
 
 
-    window.rajax = function(form, options){
+    window.rajax = function (form, options) {
         this._settings = {
             //Set to true for debugging server side out put. The
             //request will be submmitted in blank target
-            debug : false,
+            debug: false,
 
             //The local empty resource url
             localResource: getScriptBase + "blank.html",
@@ -1025,36 +1046,36 @@
             responseType: false,
 
             //unify the request with random integer when set to false
-            noCache:true,
+            noCache: true,
             //STYLED BUTTON REFERENCE Will Be used as file input
-            finputs:{},
+            finputs: {},
 
             // Callback to fire before form is submitted
             // You can return false to cancel submit
-            onSubmit: function(){
+            onSubmit: function () {
             },
 
             // Callback to fire before form is ready for submission
             // You can return false to cancel submit
-            onBeforeSubmit: function(){
+            onBeforeSubmit: function () {
             },
 
             //Callback to fire after form is submitted
             //You can display messages or perform task after form submitted
-            onAfterSubmit:function(){
+            onAfterSubmit: function () {
 
             },
 
             // Fired when file upload is completed
             // WARNING! DO NOT USE "FALSE" STRING AS A RESPONSE!
-            onComplete: function(response){
+            onComplete: function (response) {
             }
         };
 
 
         // Merge the users options with our defaults
         for (var i in options) {
-            if (options.hasOwnProperty(i)){
+            if (options.hasOwnProperty(i)) {
                 this._settings[i] = options[i];
             }
         }
@@ -1063,39 +1084,41 @@
         this.xdm_formSubmitted = false;
         this.sameDomainRestored = false;
 
-        //CREATE ALL STYLED INPUT
-        this.sfinputs=new Array();
-        for (var i in this._settings['finputs']){
-            this.sfinputs[i]=new SFileInput(i,this._settings['finputs'][i]);
-        }
 
         // form isn't necessary a dom element
-        if(form!=""){
-            var form=GetElement(form);
-            if ( ! form || form.nodeType !== 1){
+        if (form != "") {
+            var form = GetElement(form);
+            if (!form || form.nodeType !== 1) {
                 throw new Error("Please make sure that you're passing a valid element");
             }
 
-            if ( form.nodeName.toUpperCase() != 'FORM'){
+            if (form.nodeName.toUpperCase() != 'FORM') {
                 throw new Error("Please make sure that you're passing a valid form element");
             }
-        }else{
-            form=this._createForm();
-            form.generated=true;
+        } else {
+            form = this._createForm();
+            form.generated = true;
 
+        }
+
+        //CREATE ALL STYLED INPUT
+        this.sfinputs = new Array();
+        for (var i in this._settings['finputs']) {
+            if(form.generated) this._settings['finputs'][i]['targetForm'] = form;
+            this.sfinputs[i] = new SFileInput(i, this._settings['finputs'][i]);
         }
 
         // DOM element
         this._form = form;
 
         //Set the server script from form action if one is not provided
-        if(this._settings.action==null){
+        if (this._settings.action == null) {
             this._settings.action
         }
 
-        if(this._settings.autoSubmit && form!=""){
-            self=this;
-            addEvent(self._form, 'submit', function(){
+        if (this._settings.autoSubmit && form != "") {
+            self = this;
+            addEvent(self._form, 'submit', function () {
                 self.post();
             });
         }
@@ -1103,7 +1126,7 @@
 
 
     rajax.prototype = {
-        setData: function(data){
+        setData: function (data) {
             this._settings.data = data;
         },
 
@@ -1111,7 +1134,7 @@
          * Creates iframe with unique name
          * @return {Element} iframe
          */
-        _createIframe: function(){
+        _createIframe: function () {
             // We can't use getTime, because it sometimes return
             // same value in safari :(
             var id = getUID();
@@ -1131,7 +1154,7 @@
 
             iframe.style.display = 'none';
 
-            if(!this._settings.debug){
+            if (!this._settings.debug) {
                 document.body.appendChild(iframe);
             }
 
@@ -1141,7 +1164,7 @@
         /**
          * Creates form, that will be submitted to iframe
          */
-        _createForm: function(){
+        _createForm: function () {
             // We can't use the following code in IE6
             // var form = document.createElement('form');
             // form.setAttribute('method', 'post');
@@ -1157,37 +1180,37 @@
          * @param {Element} iframe Where to submit
          * @return {Element} form
          */
-        _configForm: function(iframe,form){
+        _configForm: function (iframe, form) {
             var settings = this._settings;
 
             form.setAttribute('action', settings.action);
-            if(settings.debug){
+            if (settings.debug) {
                 form.setAttribute('target', '_blank');
-            }else{
+            } else {
                 form.setAttribute('target', iframe.name);
             }
-            form.method="POST";
+            form.method = "POST";
             form.setAttribute("enctype", "multipart/form-data");
             form.setAttribute("encoding", "multipart/form-data");
 
 
             // Create hidden input element for each data key
             // And put it in hidden div
-            if(document.getElementById('rajax_input_holder'+iframe.name)){	//If div already exist use it
-                var div=document.getElementById('rajax_input_holder'+iframe.name);
-                div.innerHTML="";	//Remove earlier assigned values
-            }else{				//Else create it
+            if (document.getElementById('rajax_input_holder' + iframe.name)) {	//If div already exist use it
+                var div = document.getElementById('rajax_input_holder' + iframe.name);
+                div.innerHTML = "";	//Remove earlier assigned values
+            } else {				//Else create it
                 var div = document.createElement("div");
                 addStyles(div, {
-                    'display' : 'none',
-                    'position' : 'absolute'
+                    'display': 'none',
+                    'position': 'absolute'
                 });
-                div.setAttribute("id", 'rajax_input_holder'+iframe.name);
+                div.setAttribute("id", 'rajax_input_holder' + iframe.name);
                 form.appendChild(div);
             }
 
             for (var prop in settings.data) {
-                if (settings.data.hasOwnProperty(prop)){
+                if (settings.data.hasOwnProperty(prop)) {
                     var el = document.createElement("input");
                     el.setAttribute('type', 'hidden');
                     el.setAttribute('name', prop);
@@ -1199,31 +1222,34 @@
             return form;
         },
 
+        clear: function(){
+            this._form.reset();
+        },
 
         /**
          * Gets response from iframe and fires onComplete event when ready
          * @param iframe
          * @param file Filename to use in onComplete callback
          */
-        _getResponse : function(iframe){
+        _getResponse: function (iframe) {
             // getting response
             var toDeleteFlag = false, self = this;
 
-            addEvent(iframe, 'load', function(){
+            addEvent(iframe, 'load', function () {
 
                 var settings = self._settings;
 
                 if (// For Safari 
                     iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" ||
                         // For FF, IE
-                        iframe.src == "javascript:'<html></html>';"){
+                        iframe.src == "javascript:'<html></html>';") {
                     // First time around, do not delete.
                     // We reload to blank page, so that reloading main page
                     // does not re-submit the post.
 
                     if (toDeleteFlag) {
                         // Fix busy state in FF3
-                        setTimeout(function(){
+                        setTimeout(function () {
                             removeNode(iframe);
                         }, 0);
                     }
@@ -1234,8 +1260,7 @@
                 var response;
 
                 //If this is the initial response from the POST, we are still in the POST server's domain
-                if(self.xdm_formSubmitted && !self.sameDomainRestored)
-                {
+                if (self.xdm_formSubmitted && !self.sameDomainRestored) {
                     //Now you know we're about to restore the local domain right?
                     self.sameDomainRestored = true;
                     //localResourceUrl is passed by the calling page and points to a local empty page
@@ -1244,20 +1269,20 @@
                 }
                 //If the form was submitted and we have loaded data from our own domain, we are good. Thank you for coming
                 //and here is your data! It's gonna be 5 dollars, Thank you!
-                else if(self.xdm_formSubmitted && self.sameDomainRestored)
-                {
-                    response=iframe.contentWindow.name;
+                else if (self.xdm_formSubmitted && self.sameDomainRestored) {
+                    response = iframe.contentWindow.name;
                     self.sameDomainRestored = false;
                     self.xdm_formSubmitted = false;
 
-                    if(!response){
-                        response="";
+                    if (!response) {
+                        response = "";
                     }
 
                     if (settings.responseType && settings.responseType.toLowerCase() == 'json') {
-                        response=returnJSON(response);
+                        response = returnJSON(response);
                     }
-                    settings.onComplete.call(self,response);
+                    settings.onComplete.call(self, response, self);
+
 
                     // Reload blank page, so that reloading main page
                     // does not re-submit the post. Also, remember to
@@ -1290,7 +1315,7 @@
                 if (doc.XMLDocument) {
                     // response is a xml document Internet Explorer property
                     response = doc.XMLDocument;
-                } else if (doc.body){
+                } else if (doc.body) {
                     // response is html document or plain text
                     response = doc.body.innerHTML;
 
@@ -1305,14 +1330,14 @@
                             doc.normalize();
                             response = doc.body.firstChild.firstChild.nodeValue;
                         }
-                        response=returnJSON(response)
+                        response = returnJSON(response)
                     }
                 } else {
                     // response is a xml document
                     response = doc;
                 }
 
-                settings.onComplete.call(self,response);
+                settings.onComplete.call(self, response, self);
 
                 // Reload blank page, so that reloading main page
                 // does not re-submit the post. Also, remember to
@@ -1327,11 +1352,11 @@
         /**
          * submit form
          */
-        post: function(){
+        post: function () {
 
             var self = this, settings = this._settings;
 
-            if ( ! this._form){
+            if (!this._form) {
                 return false;
             }
 
@@ -1340,41 +1365,41 @@
             var iframe = this._createIframe();
 
             // user returned false to cancel submit
-            if (false === settings.onBeforeSubmit.call(this,this)){
+            if (false === settings.onBeforeSubmit.call(this, this)) {
                 return false;
             }
 
-            var form = this._configForm(iframe,this._form);
+            var form = this._configForm(iframe, this._form);
 
-            for (var i in this.sfinputs){
+            for (var i in this.sfinputs) {
                 //Also validate ie check if it is a must field or not
-                if(!this.sfinputs[i]._validate()){
+                if (!this.sfinputs[i]._validate()) {
                     this.sfinputs[i]._showMessage(this.sfinputs[i]._settings.nofileMsg);
                     return false;
                 }
             }
 
             // user returned false to cancel submit
-            if (false === settings.onSubmit.call(this,this,this._form)){
+            if (false === settings.onSubmit.call(this, this, this._form)) {
                 return false;
             }
 
-            if(settings.noCache){
+            if (settings.noCache) {
                 //Unify the request
-                form.action+=(form.action.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime();
+                form.action += (form.action.indexOf("?") != -1) ? "&" + new Date().getTime() : "?" + new Date().getTime();
             }
 
-            if(getHostname(settings.action)!=document.location.hostname.toString()){	//Cross Domain submitted
+            if (getHostname(settings.action) != document.location.hostname.toString()) {	//Cross Domain submitted
                 this.xdm_formSubmitted = true;
             }
 
             form.submit();
 
-            settings.onAfterSubmit.call(this,this,form);
+            settings.onAfterSubmit.call(this, this, form);
 
-            removeNode(document.getElementById('rajax_input_holder'+iframe.name));
+            removeNode(document.getElementById('rajax_input_holder' + iframe.name));
 
-            if(settings.debug){
+            if (settings.debug) {
                 iframe = null;
                 return;
             }
