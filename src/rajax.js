@@ -11,7 +11,7 @@
  *
  * By Roni Kumar Saha (roni.cse@gmail.com)
  * Mobile: 01817087873
- * http://bit.xiidea.net/rajax
+ * https://github.com/xiidea/rajax
  *
  * Please use as you wish at your own risk.
  *
@@ -20,7 +20,7 @@
  *--------------------------
  * @param1={Object} form reference
  * @param2={string} will be used as name for file input
- * @param1={Object} reference for a button which will be used as file input
+ * @param3={Object} reference for a button which will be used as file input
  * @URL={string} the script url
  *
  *    var rajax_obj=    new rajax({@param1},
@@ -29,7 +29,7 @@
  *									finputs:{
  *												{@param2}:{
  *														//Styled Button Reference
- *														button:'',
+ *														button:'{@param2}',
  *
  *														//Denied file type(s)	[deny has more priority then acceptence]
  *														deniedType:'script',
@@ -1003,11 +1003,11 @@
         /**
          * Function to check if file type is acceptable or not
          */
-        _validateType: function (file, dniedExt, allowedExt) {
+        _validateType: function (file, deniedExt, allowedExt) {
             //First check for denied
 
-            if (dniedExt != "") {
-                if (isIn(file, dniedExt)) {	//Nothing to go for it is / hand over control to user
+            if (deniedExt != "") {
+                if (isIn(file, deniedExt)) {	//Nothing to go for it is / hand over control to user
                     return 'denied';
                 }
             } else if (allowedExt == "") {		//No filter used allow everything
