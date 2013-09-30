@@ -12,18 +12,19 @@
 	window.onload = function ()
 		{
 			//Example 1
-			rajax_obj1=	new rajax('form1',
+			var rajax_obj1=	new rajax('form1',
 										{
 										 finputs:{
 													attachment:{
 															button:'button1',
 															multipleFile:true,
 															required:true,
-															allowedType:'image',
+															allowedType:'image|document',
 															selectedFileClass:'selectedFileClass',
 															selectedFileLabel:'selected_basic_file'
 														}
 											},
+                                            autoSubmit: true,
 											action:'post.php',
 											onComplete:function(response){
 												document.getElementById('form1').reset();
@@ -38,7 +39,7 @@
  											profile_pic:{
  													button:'image_upload',
  													allowedType:'image',
-													selectedFileLabel:'selected_img_file',	
+													selectedFileLabel:'selected_img_file'
  												},
  											doc_attachment:{
  													button:'doc_upload',
@@ -126,7 +127,7 @@
 <ul>
 	<li id="example1" class="example">
 		<p>You can style button as you want (Besic)</p>
-        <form id="form1" action="#" method="post" onSubmit="return rajax_obj1.post();">
+        <form id="form1" action="#" method="post">
             <div class="wrapper">
                 <div id="button1" class="button fl">Upload</div>
             </div>

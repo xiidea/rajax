@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.1
+ * v3.2
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -36,9 +36,9 @@
  *														//Allowed file type(s)
  *														allowedType:'',
  *
- *														//Denied extention(s) used only if deniedType is 'custom'
- *														denideExt:'',
- *														//Allowed extention(s) used only if allowedType is 'custom'
+ *														//Denied extension(s) used only if deniedType is 'custom'
+ *														deniedExt:'',
+ *														//Allowed extension(s) used only if allowedType is 'custom'
  *														allowedExt:'',
  *
  *														// Class applied to button when mouse is hovered
@@ -56,7 +56,7 @@
  *														multipleFile:false,
  *
  *														// Id Of selected file name
- *														//Usefull when you like to display file name in your own element
+ *														//Useful when you like to display file name in your own element
  *														selectedFileLabel: '',
  *
  *														//default message to show when no file selected for a required file input
@@ -76,16 +76,16 @@
  *														},
  *
  *														//When user select any denied File
- *														//You can process file name and extention to view custom message.
+ *														//You can process file name and extension to view custom message.
  *														//Return True to override native alert message
- *														onDenied:function(file,extention){
+ *														onDenied:function(file,extension){
  *														},
  *
  *														//When user select any acceptable File
- *														//You can process with file name and extention
+ *														//You can process with file name and extension
  *														//Return false to cancel selection
  *														// Most of the time the function is not needed
- *														onAccept:function(file,extention){
+ *														onAccept:function(file,extension){
  *														},
  *
  *														//It will helpful to show error message as per user wish
@@ -95,7 +95,7 @@
  *                                        },
  *
  *                                    //Set to true for debugging server side out put. The
- *                                    //request will be submmitted in blank target
+ *                                    //request will be submitted in blank target
  *                                    debug : false,
  *
  *                                    // Location of the server-side script,
@@ -130,7 +130,7 @@
  *                                    onComplete: function(response){
  *									}
  *                            });
- * //Triger the submit event manually
+ * //Trigger the submit event manually
  * rajax_obj.post();
  *
  *-------------
@@ -155,7 +155,7 @@
  *									}
  *							});
  *
- *    rajax_obj.post();    //Triger submitting the form
+ *    rajax_obj.post();    //Trigger submitting the form
  *
  *  var sainput= new SFileInput('doc_file',{
  *													button:'doc_upload1',
@@ -204,9 +204,11 @@
         if (type == '' || type == 'custom')
             return '';
         var extArr = type.split('|');
-        var s = new Array();
+        var s = [];
         for (var i in extArr) {
-            s[i] = fileTypeExt[extArr[i]];
+            if(fileTypeExt.hasOwnProperty(extArr[i])){
+                s[i] = fileTypeExt[extArr[i]];
+            }
         }
         return s.join('|');
     }
@@ -218,7 +220,7 @@
 
     function stopDefault(e) {
         if (e && e.preventDefault) e.preventDefault();
-        else if (window.event && window.event.returnValue)
+        else if (window.event && window.event.returnValue);
             window.event.returnValue = false;
     }
 
@@ -242,7 +244,7 @@
 
     /**
      * Attaches resize event to a window, limiting
-     * number of event fired. Fires only when encounteres
+     * number of event fired. Fires only when encountered
      * delay of 100 after series of events.
      *
      * Some browsers fire event multiple times when resizing
@@ -261,7 +263,7 @@
         });
     }
 
-    // Needs more testing, will be rewriten for next version        
+    // Needs more testing, will be rewritten for next version
     // getOffset function copied from jQuery lib (http://jquery.com/)
     if (document.documentElement.getBoundingClientRect) {
         // Get Offset using getBoundingClientRect
@@ -287,7 +289,7 @@
                 clientLeft = 0;
             }
 
-            var top = box.top / zoom + (window.pageYOffset || docElem && docElem.scrollTop / zoom || body.scrollTop / zoom) - clientTop
+            var top = box.top / zoom + (window.pageYOffset || docElem && docElem.scrollTop / zoom || body.scrollTop / zoom) - clientTop;
             var left = box.left / zoom + (window.pageXOffset || docElem && docElem.scrollLeft / zoom || body.scrollLeft / zoom) - clientLeft;
             return {
                 top: top,
@@ -417,7 +419,7 @@
      * Get Parent Tag
      * @param {element} The dom element reference (dom element/jquery element/element id)
      * @param {String} Tag name to search like a/form/tr/div/span
-     * @param {int} depth of search dafault 0
+     * @param {int} depth of search default 0
      * @return filename
      */
     function GetParentTag(el, tag, depth) {
@@ -443,7 +445,7 @@
     /**
      * Get file name from path
      * @param {String} file path to file
-     * @return filename
+     * @return string filename
      */
     function fileFromPath(file) {
         return file.replace(/.*(\/|\\)/, "");
@@ -452,7 +454,7 @@
     /**
      * Get file extension lowercase
      * @param {String} file name
-     * @return file extenstion
+     * @return string file extension
      */
     function getExt(file) {
         return (-1 !== file.indexOf('.')) ? file.replace(/.*[.]/, '') : '';
@@ -484,7 +486,7 @@
      * Easy styling and uploading
      * @constructor
      * @param button An element you want convert to
-     * upload button. Tested dimentions up to 500x500px
+     * upload button. Tested dimensions up to 500x500px
      * @param {Object} options See defaults below.
      */
     window.SFileInput = function (name, options) {
@@ -495,14 +497,14 @@
             //Target form if the input is out of any form element
             targetForm: false,
 
-            //Denied file type(s)	[deny has more priority then acceptence]
+            //Denied file type(s)	[deny has more priority then acceptance]
             deniedType: 'script',
             //Allowed file type(s)
             allowedType: '',
 
-            //Denied extention(s) used only if deniedType is 'custom'
-            denideExt: '',
-            //Allowed extention(s) used only if allowedType is 'custom'
+            //Denied extension(s) used only if deniedType is 'custom'
+            deniedExt: '',
+            //Allowed extension(s) used only if allowedType is 'custom'
             allowedExt: '',
 
             // Class applied to button when mouse is hovered
@@ -515,11 +517,20 @@
             //allow multiple file upload
             multipleFile: false,
 
+            //Number of maximum allowed file count in case of multiple file allowed
+            //0 for unlimited
+            maximum: 0,
+
             //Set it true if the input field is a must field
             required: false,
 
             //Display Selected File Name, set false, if you like to handle your self
             showFileName:true,
+
+            //Maximum lengths of file name will be shown without trimming
+            // if the value is smaller then twice of file extension length it will
+            //have no effect.
+            fileNameMaxLength : 33,
 
             // Id Of selected file name
             //Useful when you like to display file name in your own element
@@ -534,6 +545,9 @@
             //message to show on no selected file error
             nofileMsg: 'No file selected',
 
+            //Message to show on file count exceeded maximumAllowed
+            maximumAllowedExceededMsg: 'You are allowed to select {n} file(s) only',
+
             // When The file input reseted or the form reseted
             onClear: function (file) {
             },
@@ -544,17 +558,24 @@
             },
 
             //When user select any denied File
-            //You can process file name and extention to view custom message.
+            //You can process file name and extension to view custom message.
             //Return True to override native alert message
-            onDenied: function (file, extention) {
+            onDenied: function (file, extension) {
             },
 
             //When user select any acceptable File
-            //You can process with file name and extention
+            //You can process with file name and extension
             //Return false to cancel selection
             // Most of the time the function is not needed
-            onAccept: function (file, extention) {
+            onAccept: function (file, extension) {
 
+            },
+
+            //When selected file count exceed the maximum allowed
+            //file. You will have the opportunity to handle here
+            // Most of the time the function is not needed
+            onMaximumAllowedExceeded: function (input, maximumAllowed) {
+                return 'default';
             },
 
             //It will helpful to show error message as per user wish
@@ -583,11 +604,11 @@
             throw new Error("Please make sure that you're passing a valid element");
         }
 
-        //denied type not changed but extention provided, so set the type to custom
-        if (this._settings.denideExt != '' && this._settings.deniedType == 'script') {
+        //denied type not changed but extension provided, so set the type to custom
+        if (this._settings.deniedExt != '' && this._settings.deniedType == 'script') {
             this._settings.deniedType = 'custom';
         }
-        //allowed type not given but allowed extention given, set the type to custom
+        //allowed type not given but allowed extension given, set the type to custom
         if (this._settings.allowedExt != '' && this._settings.allowedType == '') {
             this._settings.allowedType = 'custom';
         }
@@ -642,7 +663,9 @@
             this._disabled = false;
 
         },
-
+        reset: function () {
+            this._clearInput();
+        },
         _showMessage: function (msg) {
             var self = this
             if (self._settings.showMessage) {
@@ -697,7 +720,6 @@
             input.setAttribute('type', 'file');
             input.setAttribute('name', this._settings.name);
 
-
             addStyles(input, {
                 'position': 'absolute',
                 // in Opera only 'browse' button
@@ -743,25 +765,36 @@
                     return;
                 }
 
-                // Get filename from input, required                
-                // as some browsers have path instead of it          
+                var selected = input.files.length || 1
+
+                // Get filename from input, required
+                // as some browsers have path instead of it
+
                 var file = fileFromPath(input.value);
                 var ext = getExt(file);
 
+                if (self._settings.maximum > 0 && (self.fileselected + selected) > self._settings.maximum) {
+                    if('default' === self._settings.onMaximumAllowedExceeded.call(self, input, self._settings.maximum)){
+                        self._showMessage(self._settings.maximumAllowedExceededMsg.replace('{n}', self._settings.maximum.toString()))
+                    }
+
+                    return;
+                }
+
                 //Check if the file type is allowed or not
-                var dniedExt = (self._settings.deniedType == 'custom') ? self._settings.denideExt : getExtList(self._settings.deniedType);
+                var deniedExt = (self._settings.deniedType == 'custom') ? self._settings.deniedExt : getExtList(self._settings.deniedType);
                 var allowedExt = (self._settings.allowedType == 'custom') ? self._settings.allowedExt : getExtList(self._settings.allowedType);
                 //alert(self._settings.deniedType)
-                var isvalid = self._validateType(file, dniedExt, allowedExt);
+                var isValid = self._validateType(file, deniedExt, allowedExt);
 
-                if (isvalid !== true) {
+                if (isValid !== true) {
                     if (true !== self._settings.onDenied.call(self, file, ext)) {
                         var alert_str = "";
-                        if (isvalid === 'denied') {	//Restricted file selected
+                        if (isValid === 'denied') {	//Restricted file selected
                             alert_str = "*." + ext + " file is not allowed";
                         } else {
                             if (self._settings.allowedType == 'custom') {
-                                alert_str = "only (*." + allowedExt.split("|").join(", *.") + ") extention(s) are allowed";
+                                alert_str = "only (*." + allowedExt.split("|").join(", *.") + ") extension(s) are allowed";
                             } else {
                                 alert_str = "only " + self._settings.allowedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1') + " file(s) are allowed";
                             }
@@ -780,43 +813,48 @@
                 }
 
 
-                if (self._settings.showFileName) {
-                    if (!self._label) {
-                        var label = GetElement(self._settings.selectedFileLabel);
-                        if (!label) {
-                            label = self._createLabel()
-                        }
-
-                        if (self._settings.selectedFileClass != "") {
-                            addClass(label, self._settings.selectedFileClass);
-                        } else {
-                            addStyles(label, {
-                                'marginLeft': '10px'
-                            });
-                        }
-                        self._label = label;
+                //  if (self._settings.showFileName) {
+                if (!self._label) {
+                    var label = GetElement(self._settings.selectedFileLabel);
+                    if (!label) {
+                        label = self._createLabel()
                     }
-                    var inputMoveTo;
-                    removeClass(self._button, self._settings.hoverClass);
-                    if (self._settings.multipleFile == true) {	//Need to create new input entry
-                        var multiInput = self._createMultipleLabel();
-                        multiInput.innerHTML = self._formatFileName(file);
-                        inputMoveTo = multiInput;
+
+                    if (self._settings.selectedFileClass != "") {
+                        addClass(label, self._settings.selectedFileClass);
                     } else {
-                        self._label.innerHTML = self._formatFileName(file);
-                        inputMoveTo = self._label;
+                        addStyles(label, {
+                            'marginLeft': '10px'
+                        });
                     }
-
-                    if(!self._parentForm){
-                        var dummyDiv = GetElement('dummy-'+inputMoveTo.id);
-                        if(dummyDiv){
-                            removeNode(dummyDiv);
-                        }
-                        self._moveInput(self._form, inputMoveTo);
-                    }else{
-                        self._moveInput(inputMoveTo, inputMoveTo);
-                    }
+                    self._label = label;
                 }
+
+                if (!self._settings.showFileName) {
+                    addStyles(self._label, {'display': 'none'});
+                }
+
+                var inputMoveTo;
+                removeClass(self._button, self._settings.hoverClass);
+                if (self._settings.multipleFile == true) {	//Need to create new input entry
+                    var multiInput = self._createMultipleLabel();
+                    multiInput.innerHTML = self._formatFileName(file);
+                    inputMoveTo = multiInput;
+                } else {
+                    self._label.innerHTML = self._formatFileName(file);
+                    inputMoveTo = self._label;
+                }
+
+                if (!self._parentForm) {
+                    var dummyDiv = GetElement('dummy-' + inputMoveTo.id);
+                    if (dummyDiv) {
+                        removeNode(dummyDiv);
+                    }
+                    self._moveInput(self._form, inputMoveTo);
+                } else {
+                    self._moveInput(inputMoveTo, inputMoveTo);
+                }
+                //   }
 
             });
 
@@ -856,9 +894,6 @@
             if (!form) {	//for now If form not found throw error
                 throw new Error('The input is without a form element');
             }
-            //$(form).unbind('reset').bind('reset', function () {
-            //self._clearInput();
-            //});
 
             addEvent(form, 'reset', function () {
                 self._clearInput();
@@ -1015,19 +1050,36 @@
         },
 
         _formatFileName: function (name) {
-            if (name.length > 33) {
-                name = name.slice(0, 19) + '...' + name.slice(-13);
+            var trimOption = this._getTrimmingOptions(name);
+
+            if (trimOption) {
+                name = name.slice(0, trimOption.first) + '...' + name.slice(-1 * trimOption.last);
             }
             return name;
+        },
+        _getTrimmingOptions: function (name) {
+            if (this._settings.fileNameMaxLength >= name.length) {
+                return false;
+            }
+
+            var ext = getExt(name)
+            if (ext.length * 2 >= this._settings.fileNameMaxLength - 4) {
+                return false;
+            }
+            var trimOption = {};
+            trimOption.last = (ext.length * 2 ) + 1;
+            trimOption.first = this._settings.fileNameMaxLength - trimOption.last - 3
+
+            return trimOption;
         }
 
     };
 
 
-    window.rajax = function (form, options) {
+    window.Rajax = window.rajax = function (form, options) {
         this._settings = {
             //Set to true for debugging server side out put. The
-            //request will be submmitted in blank target
+            //request will be submitted in blank target
             debug: false,
 
             //The local empty resource url
@@ -1049,6 +1101,10 @@
             noCache: true,
             //STYLED BUTTON REFERENCE Will Be used as file input
             finputs: {},
+
+            //Auto submitting form means submit trigger uppon form submit
+            //Default disable, make it safe to work with other library
+            autoSubmit: false,
 
             // Callback to fire before form is submitted
             // You can return false to cancel submit

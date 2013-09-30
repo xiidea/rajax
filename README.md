@@ -17,7 +17,7 @@ Key Features
 
 Current Active Version
 ======================
-v 3.1
+v 3.2
 
  
 USES
@@ -83,7 +83,7 @@ To pass Your Message
     	window.name="Your Message Here";
     </script>
 
-or To pass Full Body COntent
+or To pass Full Body Content
 
     <script>
      window.name=document.documentElement.innerHTML;
