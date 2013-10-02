@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.2
+ * v3.3
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -549,7 +549,7 @@
             maximumAllowedExceededMsg: 'You are allowed to select {n} file(s) only',
 
             // When The file input reseted or the form reseted
-            onClear: function (file) {
+            onClear: function (SFileInputObj) {
             },
 
             // When user selects a file, useful with Custom validation
@@ -774,7 +774,7 @@
                 var ext = getExt(file);
 
                 if (self._settings.maximum > 0 && (self.fileselected + selected) > self._settings.maximum) {
-                    if('default' === self._settings.onMaximumAllowedExceeded.call(self, input, self._settings.maximum)){
+                    if('default' === self._settings.onMaximumAllowedExceeded.call(self, self, self._settings.maximum)){
                         self._showMessage(self._settings.maximumAllowedExceededMsg.replace('{n}', self._settings.maximum.toString()))
                     }
 
@@ -966,7 +966,7 @@
             }
             self._input.fileselected = 0;
             self._input.inputCreated = 0;
-            self._settings.onClear.call(self)
+            self._settings.onClear.call(self, self)
             // this._input.value = ''; Doesn't work in IE6
 
             if (self._label) {
