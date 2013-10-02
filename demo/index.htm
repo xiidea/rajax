@@ -25,13 +25,13 @@
 														}
 											},
                                             autoSubmit: true,
-											action:'post.php',
+											action:'do-nothing.htm',
 											onComplete:function(response){
 												document.getElementById('form1').reset();
 												document.getElementById('output').innerHTML=response;
-											}	
-										});		
-			 //Example 2	
+											}
+										});
+			 //Example 2
 			 rajax_obj2=	new rajax('form2',
  								{
 								 responseType:'json',
@@ -53,9 +53,9 @@
  									onComplete:function(response){
 										alert(response.msg);
 										document.getElementById('form2').reset();
- 									}	
+ 									}
  							});
-							
+
 				//Example 3, Ony styled input button
 				sainput1= new SFileInput('img_file',{
  													button:'image_upload1',
@@ -70,7 +70,7 @@
 													multipleFile:true,
 													selectedFileClass:'selectedFileClass'
 											});
- 
+
 			rajax_obj3=	new rajax('',
  								{
 								// responseType:'json',
@@ -89,7 +89,7 @@
                                             selectedFileClass:'selectedFileClass'
                                         }
                                     },
- 									action:'post.php',
+ 									action:'do-nothing.htm',
 									onBeforeSubmit:function(ref){
 										ref.setData({'username':'roni','password':'123456'});
 										return true;
@@ -97,18 +97,18 @@
  									onComplete:function(response, ref){
                                         ref.clear();
 										document.getElementById('output').innerHTML=response;
- 									}	
+ 									}
  							});
 
             rajax_obj4 =	new rajax('form4',
                     {
-                        action:'http://www.sample.roni/rajax/demo/xdm.php',
+                        action:'do-nothing.htm',
                         onComplete:function(response){
                             document.getElementById('form4').reset();
                             document.getElementById('output').innerHTML=response;
                         }
                     });
-							
+
 		}
 
     function validate_me(){
@@ -140,10 +140,10 @@
                 &nbsp;
                 <input class="button" type="reset" value="Reset form"/>
             </div>
-            
+
         </form>
 	</li>
-	
+
 	<li id="example2" class="example">
 		<p>You can make a list of allowed file types(advance)</p>
 		<form id="form2" action="#" method="post" onSubmit="return rajax_obj2.post();">
@@ -168,7 +168,7 @@
 	</li>
     <li id="example3" class="example">
 		<p>Use of only styled input button</p>
-		<form id="form3" action="post.php" method="post" enctype="multipart/form-data" onSubmit="return validate_me()">
+		<form id="form3" action="do-nothing.htm" method="post" enctype="multipart/form-data" onSubmit="return validate_me()">
             <div class="wrapper">
                 <div id="image_upload1" class="button fl">Select Image File</div>
             </div>
@@ -186,10 +186,10 @@
               </div>
         </form>
 	</li>
-    
+
      <li id="example4" class="example">
 		<p>Use of without form element</p>
-		
+
             <div class="wrapper">
                 <div id="image_upload2" class="button fl">Select Image File</div>
             </div>
@@ -208,7 +208,7 @@
 	</li>
 
     <li id="example5" class="example">
-        <form id="form4" action="post.php" method="post" enctype="multipart/form-data">
+        <form id="form4" action="do-nothing.htm" method="post" enctype="multipart/form-data">
         <p>Use of form with normal file input</p>
 
         <div class="wrapper">
