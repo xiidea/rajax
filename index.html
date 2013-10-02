@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Rajax by xiidea</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Rajax</h1>
+          <h2>A javascript iframe form submit with styled file input support</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/xiidea/rajax/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/xiidea/rajax/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/xiidea/rajax" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="rajax" class="anchor" href="#rajax"><span class="octicon octicon-link"></span></a>Rajax</h1>
+
+<p>A javascript library to handle ajax like form submit. Please use as you wish at your own risk.</p>
+
+<h1>
+<a name="key-features" class="anchor" href="#key-features"><span class="octicon octicon-link"></span></a>Key Features</h1>
+
+<ul>
+<li>Easy to integrate with any form</li>
+<li>Supports Styled File Input</li>
+<li>Any styled Html element can be used as File Input</li>
+<li>Styled File Input Can be used within any form</li>
+<li>Supports File Input type validation</li>
+<li>Ajax like form submit with custom data</li>
+<li>No data size limitation</li>
+<li>Cross domain communication using name transport</li>
+</ul><h1>
+<a name="current-active-version" class="anchor" href="#current-active-version"><span class="octicon octicon-link"></span></a>Current Active Version</h1>
+
+<p>v 3.3</p>
+
+<h1>
+<a name="uses-and-cookbook" class="anchor" href="#uses-and-cookbook"><span class="octicon octicon-link"></span></a>USES and Cookbook</h1>
+
+<ul>
+<li>
+<p><strong>Basic Uses, Submit your form and do something after the request completed</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="nx">autoSubmit</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+    <span class="nx">onComplete</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//Complete Actions</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+</li>
+<li>
+<p><strong>Basic use Styled File Input Only</strong></p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">sInput</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SFileInput</span><span class="p">(</span><span class="s1">'input_name'</span><span class="p">,</span> <span class="p">{</span>
+            <span class="nx">button</span><span class="o">:</span><span class="s1">'element_id'</span><span class="p">,</span>    <span class="c1">//The element ID you want to use as file input</span>
+    <span class="p">});</span>
+</pre></div>
+</li>
+<li><p><strong>Use Rajax with styled file input</strong></p></li>
+</ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span><span class="o">=</span><span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="nx">form</span><span class="p">,</span>
+     <span class="p">{</span>
+         <span class="nx">finputs</span><span class="o">:</span> <span class="p">{</span>                             <span class="c1">//All Styled file input options, user input_name as key</span>
+            <span class="nx">input_name_1</span><span class="o">:</span> <span class="p">{</span>                     <span class="c1">//input_name_1 will be the name of your input field</span>
+                <span class="nx">button</span><span class="o">:</span><span class="s1">'file_uploader_element1'</span>
+            <span class="p">},</span>
+            <span class="nx">input_name_2</span><span class="o">:</span> <span class="p">{</span>
+                <span class="nx">button</span><span class="o">:</span><span class="s1">'file_uploader_element2'</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+         <span class="nx">autoSubmit</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+         <span class="nx">onComplete</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                 <span class="c1">//Complete Actions</span>
+         <span class="p">}</span>
+     <span class="p">});</span>
+</pre></div>
+
+<ul>
+<li>
+<p>**Use with other libraries which bind to the form submit event</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="c1">//autoSubmit : false,       //Default value is false, you can omit this option</span>
+    <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//Complete Actions</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
+</pre></div>
+</li>
+<li>
+<p><strong>Use without a form!</strong></p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span>
+<span class="p">{</span>
+    <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//Complete Actions</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
+</pre></div>
+</li>
+<li><p><strong>Cross domain Implementation</strong></p></li>
+</ul><p>Cross domain communication need some extra scripting and its till experimental. only checked on FF10, IE9, Chrome17. Hope fully it should work on other version of browser. To perform cross browser submission you need to follow the steps bellow:</p>
+
+<ul>
+<li>Place <strong>blank.html</strong> file in your working directory or any other location and assign as <strong>localResource</strong> value.</li>
+</ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span><span class="o">=</span><span class="k">new</span> <span class="nx">rajax</span><span class="p">(</span><span class="nx">form</span><span class="p">,</span>
+      <span class="p">{</span>
+          <span class="nx">localResource</span><span class="o">:</span><span class="s2">"path/to/local/blank.html"</span>
+      <span class="p">});</span>
+</pre></div>
+
+<ul>
+<li>Remote Server Scripting: You need to add a javascript code on the page of remote domain</li>
+</ul><p>To pass Your Message</p>
+
+<div class="highlight highlight-html"><pre>    <span class="nt">&lt;script&gt;</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">name</span><span class="o">=</span><span class="s2">"Your Message Here"</span><span class="p">;</span>
+    <span class="nt">&lt;/script&gt;</span>
+</pre></div>
+
+<p>or To pass Full Body Content</p>
+
+<div class="highlight highlight-html"><pre>    <span class="nt">&lt;html&gt;</span>
+        <span class="nt">&lt;body&gt;</span>
+            Your Message Here
+        <span class="nt">&lt;/body&gt;</span>
+        <span class="nt">&lt;script&gt;</span>
+            <span class="nb">window</span><span class="p">.</span><span class="nx">name</span><span class="o">=</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'body'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">innerHTML</span><span class="p">;</span>
+        <span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;html&gt;</span>
+</pre></div>
+
+<h2>
+<a name="rajax-options" class="anchor" href="#rajax-options"><span class="octicon octicon-link"></span></a>Rajax Options:</h2>
+
+<ul>
+<li><p><strong>action</strong><br>
+type: string<br>
+default : null<br>
+Location of the server-side script. omit it if you like to use the form action attribute instead</p></li>
+<li><p><strong>data</strong><br>
+Type: PlainObject<br>
+Additional data to be sent to the server as {name:value} pair</p></li>
+<li><p><strong>responseType</strong><br>
+type: string<br>
+The type of data that you're expecting back from the server. html and xml are detected automatically. Only useful when you are using json data as a response. Set to "json" in that case.</p></li>
+<li><p><strong>noCache</strong><br>
+type: boolean<br>
+default : true<br>
+unify the request with random integer when set to false. Useful when you are submitting nothing and accessing a url.</p></li>
+<li><p><strong>finputs</strong><br>
+type: Object<br>
+default : {}<br>
+STYLED BUTTON REFERENCE Will Be used as file input. This section contain all Styled Input Button settings</p></li>
+<li><p><strong>autoSubmit</strong><br>
+type: boolean<br>
+default : false<br>
+Auto submitting form means submit trigger upon form submit event. Default disable, make it safe to work with other library</p></li>
+<li><p><strong>onBeforeSubmit</strong><br>
+Type: Function( Rajax rajaxObject)<br>
+A function to be called when the request being prepared, before styled input validation done. The function gets passed one arguments: The rajaxObject object. You can use <code>rajaxObject.setData({'username':'roni','password':'123456'});</code> api to set custom data. You can return false to cancel submit</p></li>
+<li><p><strong>onSubmit</strong><br>
+Type: Function( Rajax rajaxObject, Object form )<br>
+A function to be called when the request ready to post, styled input validation done(after onBeforeSubmit callback are executed) just before submitting. The function gets passed two arguments: The rajaxObject object and the form object. You can return false to cancel submit</p></li>
+<li><p><strong>onAfterSubmit</strong><br>
+Type: Function( Rajax rajaxObject, Object form )<br>
+A function to be called just after submitting. The function gets passed two arguments: The rajaxObject object and the form object. For some Request We may not expect receive response from server. on those cases, we can use this callback to complete our action as the onComplete event may not fired</p></li>
+<li><p><strong>onComplete</strong><br>
+Type: Function( mix response, Rajax rajaxObject )<br>
+A function to be called when the request finishes (after all other callbacks are executed). The function gets passed two arguments: The response from server and The rajaxObject object.</p></li>
+</ul><h1>
+<a name="sfileinput-options" class="anchor" href="#sfileinput-options"><span class="octicon octicon-link"></span></a>SFileInput Options:</h1>
+
+<ul>
+<li><p><strong>button</strong><br>
+type: string<br>
+required : true<br>
+Styled Button Reference. Id of the html element we like to use as file input</p></li>
+<li><p><strong>deniedType</strong><br>
+Type: string<br>
+Pipe line separated Denied file type(s) like <code>'image|document|audio'</code>    [deny has more priority then acceptance]</p></li>
+<li><p><strong>allowedType</strong><br>
+Type: string<br>
+Pipe line separated Allowed file type(s) like <code>'image|document|audio'</code></p></li>
+<li><p><strong>deniedExt</strong><br>
+Type: string<br>
+Pipe line separated Denied file extension(s) like <code>'doc|docx|gif'</code> Denied extension(s) used only if deniedType is 'custom'</p></li>
+<li><p><strong>allowedExt</strong><br>
+Type: string<br>
+Pipe line separated Allowed file extension(s) like <code>'doc|docx|gif'</code> Denied extension(s) used only if allowedType is 'custom'</p></li>
+<li><p><strong>hoverClass</strong><br>
+type: string<br>
+Class applied to button when mouse is hovered</p></li>
+<li><p><strong>focusClass</strong><br>
+type: string<br>
+Class applied to button when button is focused</p></li>
+<li><p><strong>disabledClass</strong><br>
+type: string<br>
+Class applied to button when  when button is disabled</p></li>
+<li><p><strong>multipleFile</strong><br>
+type: boolean<br>
+default : false<br>
+control allowing multiple file upload</p></li>
+<li><p><strong>maximum</strong><br>
+type: integer<br>
+default : 0 [unlimited]<br>
+Number of maximum allowed file count in case of multiple file allowed</p></li>
+<li><p><strong>required</strong><br>
+type: boolean<br>
+default : false<br>
+Set it true if the input field is a required field</p></li>
+<li><p><strong>showFileName</strong><br>
+type: boolean<br>
+default : true<br>
+Display Selected File Name, set false, if you like to handle your self</p></li>
+<li><p><strong>fileNameMaxLength</strong><br>
+type: integer<br>
+Maximum lengths of file name will be shown without trimming. if the value is smaller then twice of file extension length it will have no effect.</p></li>
+<li><p><strong>selectedFileLabel</strong><br>
+type: string<br>
+Id Of element you like to show the selected file name. Useful when you like to display file name in your own pre-existing element</p></li>
+<li><p><strong>selectedFileClass</strong><br>
+type: string<br>
+Class applied to selectedFileLabel  element</p></li>
+<li><p><strong>multiInputRemoveClass</strong><br>
+type: string<br>
+Class applied to selected file name  element</p></li>
+<li><p><strong>nofileMsg</strong><br>
+type: string<br>
+message to show on no selected file error</p></li>
+<li><p><strong>maximumAllowedExceededMsg</strong><br>
+type: string<br>
+Message to show on file count exceeded maximumAllowed. You can use {n} place holder to display maximum allowed number</p></li>
+<li><p><strong>onClear</strong><br>
+Type: Function( SFileInput file)<br>
+A function to be called when the file input reseted or the form reseted. The function gets passed one arguments: The SFileInput object.</p></li>
+<li><p><strong>onChange</strong><br>
+Type: Function( String file, String extension )<br>
+A function to be called When user selects a file. useful with Custom validation. You can return false to cancel file selection. The function gets passed two arguments: The file name and the file extension.</p></li>
+<li><p><strong>onDenied</strong><br>
+Type: Function( String file, String extension )<br>
+A function to be called When user select any denied File. You can process file name and extension to show custom message. Return True to override native alert message. The function gets passed two arguments: The file name and the file extension.</p></li>
+<li><p><strong>onAccept</strong><br>
+Type: Function( String file, String extension )<br>
+A function to be called When user select any acceptable File You can process with file name and extension. Return false to cancel selection. Most of the time the function is not needed. The function gets passed two arguments: The file name and the file extension.</p></li>
+<li><p><strong>onMaximumAllowedExceeded</strong><br>
+Type: Function( SFileInput file, integer maximumAllowed )<br>
+A function to be called When selected file count exceed the maximum allowed file. You will have the opportunity to handle here. Most of the time the function is not needed. The function gets passed two arguments: The SFileInput object and the maximumAllowed count.</p></li>
+<li><p><strong>showMessage</strong><br>
+Type: Function( string message)<br>
+Override the default message showing function. The function gets passed one arguments: The message.</p></li>
+</ul><h1>
+<a name="dependencies" class="anchor" href="#dependencies"><span class="octicon octicon-link"></span></a>Dependencies</h1>
+
+<p>To use this library you only need javascript support. </p>
+        </section>
+
+        <footer>
+          Rajax is maintained by <a href="https://github.com/xiidea">xiidea</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
