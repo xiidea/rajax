@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Rajax Form Submitting Demo</title>
+    
+    <!-- Rajax script itself doesn't have any dependencies-->
+    <script type="text/javascript" src="../src/rajax.js"></script>
+	<link rel="stylesheet" href="style.css" type="text/css" media="all" />   
+	
+	<script type="text/javascript">/*<![CDATA[*/	
+	window.onload = function ()
+		{
+			//Example 1
+			var rajax_obj1=	new rajax('form1',
+										{
+										 finputs:{
+													attachment:{
+															button:'button1',
+															multipleFile:true,
+															required:true,
+															allowedType:'image|document',
+															selectedFileClass:'selectedFileClass',
+															selectedFileLabel:'selected_basic_file'
+														}
+											},
+                                            autoSubmit: true,
+											action:'post.php',
+											onComplete:function(response){
+												document.getElementById('form1').reset();
+												document.getElementById('output').innerHTML=response;
+											}	
+										});		
+			 //Example 2	
+			 rajax_obj2=	new rajax('form2',
+ 								{
+								 responseType:'json',
+ 								 finputs:{
+ 											profile_pic:{
+ 													button:'image_upload',
+ 													allowedType:'image',
+													selectedFileLabel:'selected_img_file'
+ 												},
+ 											doc_attachment:{
+ 													button:'doc_upload',
+ 													allowedType:'document',
+													selectedFileLabel:'selected_doc_file',
+													multipleFile:true,
+													selectedFileClass:'selectedFileClass'
+ 												}
+ 									},
+ 									action:'do-nothing.htm',
+ 									onComplete:function(response){
+										alert(response.msg);
+										document.getElementById('form2').reset();
+ 									}	
+ 							});
+							
+				//Example 3, Ony styled input button
+				sainput1= new SFileInput('img_file',{
+ 													button:'image_upload1',
+ 													allowedType:'image',
+													selectedFileLabel:'selected_img_file1',
+													required:true
+											});
+				var sainput= new SFileInput('doc_file',{
+													button:'doc_upload1',
+ 													allowedType:'document',
+													selectedFileLabel:'selected_doc_file1',
+													multipleFile:true,
+													selectedFileClass:'selectedFileClass'
+											});
+ 
+			rajax_obj3=	new rajax('',
+ 								{
+								// responseType:'json',
+									//data:
+                                    finputs:{
+                                        profile_pic:{
+                                            button:'image_upload2',
+                                            allowedType:'image',
+                                            selectedFileLabel:'selected_img_file2'
+                                        },
+                                        doc_attachment:{
+                                            button:'doc_upload2',
+                                            allowedType:'document',
+                                            selectedFileLabel:'selected_doc_file2',
+                                            multipleFile:true,
+                                            selectedFileClass:'selectedFileClass'
+                                        }
+                                    },
+ 									action:'post.php',
+									onBeforeSubmit:function(ref){
+										ref.setData({'username':'roni','password':'123456'});
+										return true;
+									},
+ 									onComplete:function(response, ref){
+                                        ref.clear();
+										document.getElementById('output').innerHTML=response;
+ 									}	
+ 							});
+
+            rajax_obj4 =	new rajax('form4',
+                    {
+                        action:'http://www.sample.roni/rajax/demo/xdm.php',
+                        onComplete:function(response){
+                            document.getElementById('form4').reset();
+                            document.getElementById('output').innerHTML=response;
+                        }
+                    });
+							
+		}
+
+    function validate_me(){
+			return sainput1.validate();
+		}
+	/*]]>*/</script>
+	</head>
+<body>
+<div id="output"></div>
+<div id="text">
+<h1>Rajax Form Submitting with styled file input demo</h1>
+<p>
+	Feel free to view the source code of this page to see how the demo is done.</p>
+</div>
+
+<ul>
+	<li id="example1" class="example">
+		<p>You can style button as you want (Besic)</p>
+        <form id="form1" action="#" method="post">
+            <div class="wrapper">
+                <div id="button1" class="button fl">Upload</div>
+            </div>
+            <div class="wrapper"><br>
+
+                <p>Selected files:</p>
+                <div id="selected_basic_file"></div><br>
+
+                <input class="button" type="submit" value="Submit form" />
+                &nbsp;
+                <input class="button" type="reset" value="Reset form"/>
+            </div>
+            
+        </form>
+	</li>
+	
+	<li id="example2" class="example">
+		<p>You can make a list of allowed file types(advance)</p>
+		<form id="form2" action="#" method="post" onSubmit="return rajax_obj2.post();">
+            <div class="wrapper">
+                <div id="image_upload" class="button fl">Select Image File</div>
+            </div>
+            <div class="wrapper">
+                <div id="doc_upload" class="button fl">Select Document File</div>
+            </div>
+            <div class="wrapper"><br>
+
+                <p>image Selected:</p>
+                <ol id="selected_img_file"></ol>
+                <p>document Selected:</p>
+                <div id="selected_doc_file"></div>
+                <br>
+
+                <input class="button" type="submit" value="Submit form"/>
+                <input class="button" type="reset" value="Reset form"/>
+              </div>
+        </form>
+	</li>
+    <li id="example3" class="example">
+		<p>Use of only styled input button</p>
+		<form id="form3" action="post.php" method="post" enctype="multipart/form-data" onSubmit="return validate_me()">
+            <div class="wrapper">
+                <div id="image_upload1" class="button fl">Select Image File</div>
+            </div>
+            <div class="wrapper">
+                <div id="doc_upload1" class="button fl">Select Document File</div>
+            </div>
+            <div class="wrapper"><br>
+                <p>image Selected:</p>
+                <ol id="selected_img_file1"></ol>
+                <p>document Selected:</p>
+                <div id="selected_doc_file1"></div>
+                <br>
+                <input class="button" type="submit" value="Submit form"/>
+                <input class="button" type="reset" value="Reset form"/>
+              </div>
+        </form>
+	</li>
+    
+     <li id="example4" class="example">
+		<p>Use of without form element</p>
+		
+            <div class="wrapper">
+                <div id="image_upload2" class="button fl">Select Image File</div>
+            </div>
+            <div class="wrapper">
+                <div id="doc_upload2" class="button fl">Select Document File</div>
+            </div>
+            <div class="wrapper"><br>
+                <p>image Selected:</p>
+                <ol id="selected_img_file2"></ol>
+                <p>document Selected:</p>
+                <div id="selected_doc_file2"></div>
+                <br>
+                <input class="button" type="button" value="Submit form" onClick="rajax_obj3.post()"/>
+                <input class="button" type="reset" value="Reset form"/>
+              </div>
+	</li>
+
+    <li id="example5" class="example">
+        <form id="form4" action="post.php" method="post" enctype="multipart/form-data">
+        <p>Use of form with normal file input</p>
+
+        <div class="wrapper">
+                                              Select a document
+        </div>
+        <div class="wrapper">
+            <input type="file" name="document">
+        </div>
+        <div class="wrapper"><br>
+            <input class="button" type="button" value="Submit form" onClick="rajax_obj4.post()"/>
+            <input class="button" type="reset" value="Reset form"/>
+        </div>
+       </form>
+    </li>
+    
+</ul>
+</body>
+</html>
