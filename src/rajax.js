@@ -93,27 +93,6 @@
         }
     }
 
-    /**
-     * Attaches resize event to a window, limiting
-     * number of event fired. Fires only when encountered
-     * delay of 100 after series of events.
-     *
-     * Some browsers fire event multiple times when resizing
-     * http://www.quirksmode.org/dom/events/resize.html
-     *
-     * @param fn callback This refers to the passed element
-     */
-    function addResizeEvent(fn) {
-        var timeout;
-
-        addEvent(window, 'resize', function () {
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(fn, 100);
-        });
-    }
-
     // Needs more testing, will be rewritten for next version
     // getOffset function copied from jQuery lib (http://jquery.com/)
     if (document.documentElement.getBoundingClientRect) {
