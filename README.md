@@ -60,7 +60,7 @@ USES and Cookbook
      });
  ```
 
-* **Use with other libraries which bind to the form submit event
+* **Use with other libraries which bind to the form submit event**
 ```javascript
     var rajax_obj = new Rajax('my-form-id',
     {
