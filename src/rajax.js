@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.3
+ * v3.4
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -11,7 +11,7 @@
  *
  * By Roni Kumar Saha (roni.cse@gmail.com)
  * Mobile: 01817087873
- * https://github.com/xiidea/rajax
+ * http://xiidea.github.io/rajax/
  *
  * Please use as you wish at your own risk.
  *
@@ -40,7 +40,7 @@
     function getHostname(url) {
         var re = new RegExp('^(?:f|ht)tp(?:s)?\://([^/]+)', 'im');
         var arr = url.match(re);
-        return arr ? arr[1].toString() : document.location.hostname;
+        return arr ? arr[1].toString() : document.location.hostname.toString();
     }
 
     function returnJSON(response) {
@@ -378,6 +378,18 @@
             //Message to show on file count exceeded maximumAllowed
             maximumAllowedExceededMsg: 'You are allowed to select {n} file(s) only',
 
+            //Message show when selected extension is in denied list
+            typeErrorDeniedExtensionMsg: '*.{s} file is not allowed',
+
+            //Message show when selected file type is in denied list
+            typeErrorDeniedTypeMsg: '{s} file(s) are not allowed',
+
+            //Message show when selected file type is not in allowed list
+            typeErrorFileTypeNotAllowedMsg: 'You are allowed to select {s} file(s) only',
+
+            //Message show when selected extension is not in allowed list
+            typeErrorExtensionNotAllowedMsg: 'only {s} file(s) are allowed',
+
             // When The file input reseted or the form reseted
             onClear: function (SFileInputObj) {
             },
@@ -621,12 +633,19 @@
                     if (true !== self._settings.onDenied.call(self, file, ext)) {
                         var alert_str = "";
                         if (isValid === 'denied') {	//Restricted file selected
-                            alert_str = "*." + ext + " file is not allowed";
+                            if(self._settings.deniedType == 'custom'){
+                                alert_str = self._settings.typeErrorDeniedExtensionMsg.replace('{s}', ext);
+                            }else{
+                                var deniedTypes = self._settings.deniedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1');
+                                alert_str = self._settings.typeErrorDeniedTypeMsg.replace('{s}', deniedTypes);
+                            }
                         } else {
                             if (self._settings.allowedType == 'custom') {
-                                alert_str = "only (*." + allowedExt.split("|").join(", *.") + ") extension(s) are allowed";
+                                var allowedExtension = "(*." + allowedExt.split("|").join(", *.") + ")";
+                                alert_str = self._settings.typeErrorExtensionNotAllowedMsg.replace('{s}', allowedExtension);
                             } else {
-                                alert_str = "only " + self._settings.allowedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1') + " file(s) are allowed";
+                                var allowedTypes = self._settings.allowedType.split("|").join(",").replace(/,([^,]+)$/, ' & $1');
+                                alert_str = self._settings.typeErrorFileTypeNotAllowedMsg.replace('{s}', allowedTypes);
                             }
                         }
                         self._showMessage(alert_str);
