@@ -12,7 +12,7 @@
 	window.onload = function ()
 		{
 			//Example 1
-			var rajax_obj1=	new rajax('form1',
+			var rajax_obj1=	new Rajax('form1',
 										{
 										 finputs:{
 													attachment:{
@@ -32,7 +32,7 @@
 											}	
 										});		
 			 //Example 2	
-			 rajax_obj2=	new rajax('form2',
+			 rajax_obj2=	new Rajax('form2',
  								{
 								 responseType:'json',
  								 finputs:{
@@ -168,7 +168,7 @@
 	</li>
     <li id="example3" class="example">
 		<p>Use of only styled input button</p>
-		<form id="form3" action="post.php" method="post" enctype="multipart/form-data" onSubmit="return validate_me()">
+		<form id="form3" action="post.php" method="post" onSubmit="return validate_me()">
             <div class="wrapper">
                 <div id="image_upload1" class="button fl">Select Image File</div>
             </div>
@@ -208,7 +208,7 @@
 	</li>
 
     <li id="example5" class="example">
-        <form id="form4" action="post.php" method="post" enctype="multipart/form-data">
+        <form id="form4" action="post.php" method="post">
         <p>Use of form with normal file input</p>
 
         <div class="wrapper">

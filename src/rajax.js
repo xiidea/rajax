@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.4
+ * v3.4.1
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -93,55 +93,57 @@
         }
     }
 
-    // Needs more testing, will be rewritten for next version
-    // getOffset function copied from jQuery lib (http://jquery.com/)
-    if (document.documentElement.getBoundingClientRect) {
-        // Get Offset using getBoundingClientRect
-        // http://ejohn.org/blog/getboundingclientrect-is-awesome/
-        var getOffset = function (el) {
-            var box = el.getBoundingClientRect();
-            var doc = el.ownerDocument;
-            var body = doc.body;
-            var docElem = doc.documentElement; // for ie 
-            var clientTop = docElem.clientTop || body.clientTop || 0;
-            var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+    var getOffset = (function () {
+        // Needs more testing, will be rewritten for next version
+        // getOffset function copied from jQuery lib (http://jquery.com/)
+        if (document.documentElement.getBoundingClientRect) {
+            // Get Offset using getBoundingClientRect
+            // http://ejohn.org/blog/getboundingclientrect-is-awesome/
+            return function (el) {
+                var box = el.getBoundingClientRect();
+                var doc = el.ownerDocument;
+                var body = doc.body;
+                var docElem = doc.documentElement; // for ie
+                var clientTop = docElem.clientTop || body.clientTop || 0;
+                var clientLeft = docElem.clientLeft || body.clientLeft || 0;
 
-            // In Internet Explorer 7 getBoundingClientRect property is treated as physical,
-            // while others are logical. Make all logical, like in IE8.	
-            var zoom = 1;
-            if (body.getBoundingClientRect) {
-                var bound = body.getBoundingClientRect();
-                zoom = (bound.right - bound.left) / body.clientWidth;
-            }
+                // In Internet Explorer 7 getBoundingClientRect property is treated as physical,
+                // while others are logical. Make all logical, like in IE8.
+                var zoom = 1;
+                if (body.getBoundingClientRect) {
+                    var bound = body.getBoundingClientRect();
+                    zoom = (bound.right - bound.left) / body.clientWidth;
+                }
 
-            if (zoom > 1) {
-                clientTop = 0;
-                clientLeft = 0;
-            }
+                if (zoom > 1) {
+                    clientTop = 0;
+                    clientLeft = 0;
+                }
 
-            var top = box.top / zoom + (window.pageYOffset || docElem && docElem.scrollTop / zoom || body.scrollTop / zoom) - clientTop;
-            var left = box.left / zoom + (window.pageXOffset || docElem && docElem.scrollLeft / zoom || body.scrollLeft / zoom) - clientLeft;
-            return {
-                top: top,
-                left: left
+                var top = box.top / zoom + (window.pageYOffset || docElem && docElem.scrollTop / zoom || body.scrollTop / zoom) - clientTop;
+                var left = box.left / zoom + (window.pageXOffset || docElem && docElem.scrollLeft / zoom || body.scrollLeft / zoom) - clientLeft;
+                return {
+                    top: top,
+                    left: left
+                };
             };
-        };
-    } else {
-        // Get offset adding all offsets 
-        var getOffset = function (el) {
-            var top = 0, left = 0;
-            do {
-                top += el.offsetTop || 0;
-                left += el.offsetLeft || 0;
-                el = el.offsetParent;
-            } while (el);
+        } else {
+            // Get offset adding all offsets
+            return function (el) {
+                var top = 0, left = 0;
+                do {
+                    top += el.offsetTop || 0;
+                    left += el.offsetLeft || 0;
+                    el = el.offsetParent;
+                } while (el);
 
-            return {
-                left: left,
-                top: top
+                return {
+                    left: left,
+                    top: top
+                };
             };
-        };
-    }
+        }
+    })();
 
     /**
      * Returns left, top, right and bottom properties describing the border-box,
@@ -252,8 +254,8 @@
      * @param {int} depth of search default 0
      * @return filename
      */
-    function GetParentTag(el, tag, depth) {
-        var el = GetElement(el);
+    function GetParentTag(element, tag, depth) {
+        var el = GetElement(element);
         if (!el.parentNode)				//return null if parent node is not exist
             return null;
         if (typeof tag == 'undefined')		//return parent node if node type is not defined
@@ -470,6 +472,23 @@
         this._input = null;
         // If disabled clicking on button won't do anything
         this._disabled = false;
+
+        this._parentForm = GetParentTag(this._button, 'form');
+
+        var form = this._settings.targetForm || this._parentForm
+
+        //To do, if form is not found then create a form element to handle the submit process
+        if (!form) {	//for now If form not found throw error
+            throw new Error('The input is without a form element');
+        }
+
+        var self = this;
+
+        addEvent(form, 'reset', function () {
+            self._clearInput();
+        });
+
+        this._form = form;
 
         // if the button was disabled before refresh if will remain
         // disabled in FireFox, let's fix it
@@ -734,25 +753,9 @@
 
             div.appendChild(input);
 
-
-            this._parentForm = GetParentTag(this._button, 'form');
-
-            var form = self._settings.targetForm || this._parentForm
-
-            //To do, if form is not found then create a form element to handle the submit process
-            if (!form) {	//for now If form not found throw error
-                throw new Error('The input is without a form element');
-            }
-
-            addEvent(form, 'reset', function () {
-                self._clearInput();
-            });
-
-            this._form=form;
             //form.appendChild(div);
             //The positioning problem arise in form mode, Better insert it into form while submitting
             document.body.appendChild(div);
-
 
             this._input = input;
         },
@@ -813,8 +816,8 @@
             if (!self._input) {
                 return;
             }
-            self._input.fileselected = 0;
-            self._input.inputCreated = 0;
+            self.fileselected = 0;
+            self.inputCreated = 0;
             self._settings.onClear.call(self, self)
             // this._input.value = ''; Doesn't work in IE6
 
@@ -1022,7 +1025,7 @@
         }
 
         if (this._settings.autoSubmit && form != "") {
-            self = this;
+            var self = this;
             addEvent(self._form, 'submit', function () {
                 self.post();
             });

@@ -17,7 +17,7 @@ Key Features
 
 Current Active Version
 ======================
-v 3.3
+v 3.4.1
 
  
 USES and Cookbook
@@ -245,7 +245,27 @@ message to show on no selected file error
 type: string  
 Message to show on file count exceeded maximumAllowed. You can use {n} place holder to display maximum allowed number
 
-* **onClear**  
+* **typeErrorDeniedExtensionMsg**
+type: string
+default: *.{s} file is not allowed
+Message to show on selecting a denied file extension. You can use {s} place holder to display extension
+
+* **typeErrorDeniedTypeMsg**
+type: string
+default: {s} file(s) are not allowed
+Message to show on selecting a denied file type. You can use {s} place holder to display types
+
+* **typeErrorFileTypeNotAllowedMsg**
+type: string
+default: You are allowed to select {s} file(s) only
+Message to show on selecting a file type that is not in allowed list. You can use {s} place holder to display types those are allowed
+
+* **typeErrorExtensionNotAllowedMsg**
+type: string
+default: only {s} file(s) are allowed
+Message to show on selecting a file with extension that is not in allowed list. You can use {s} place holder to display extensions those are allowed
+
+* **onClear**
 Type: Function( SFileInput file)  
 A function to be called when the file input reseted or the form reseted. The function gets passed one arguments: The SFileInput object.
 
