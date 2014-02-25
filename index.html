@@ -51,33 +51,31 @@
 </ul><h1>
 <a name="current-active-version" class="anchor" href="#current-active-version"><span class="octicon octicon-link"></span></a>Current Active Version</h1>
 
-<p>v 3.3 <a href="./demo/">Browse the demo</a></p>
+<p>v 3.4.1</p>
 
 <h1>
 <a name="uses-and-cookbook" class="anchor" href="#uses-and-cookbook"><span class="octicon octicon-link"></span></a>USES and Cookbook</h1>
 
 <ul>
-<li>
-<p><strong>Basic Uses, Submit your form and do something after the request completed</strong></p>
-
-<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
-<span class="p">{</span>
-    <span class="nx">autoSubmit</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
-    <span class="nx">onComplete</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//Complete Actions</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-</pre></div>
-</li>
-<li>
-<p><strong>Basic use Styled File Input Only</strong></p>
-
-<div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">sInput</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SFileInput</span><span class="p">(</span><span class="s1">'input_name'</span><span class="p">,</span> <span class="p">{</span>
-            <span class="nx">button</span><span class="o">:</span><span class="s1">'element_id'</span><span class="p">,</span>    <span class="c1">//The element ID you want to use as file input</span>
+<li><strong>Basic Uses, Submit your form and do something after the request completed</strong></li>
+</ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="nx">autoSubmit</span><span class="o">:</span><span class="kc">true</span><span class="p">,</span>
+        <span class="nx">onComplete</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//Complete Actions</span>
+        <span class="p">}</span>
     <span class="p">});</span>
 </pre></div>
-</li>
-<li><p><strong>Use Rajax with styled file input</strong></p></li>
+
+<ul>
+<li><strong>Basic use Styled File Input Only</strong></li>
+</ul><div class="highlight highlight-javascript"><pre>        <span class="kd">var</span> <span class="nx">sInput</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SFileInput</span><span class="p">(</span><span class="s1">'input_name'</span><span class="p">,</span> <span class="p">{</span>
+                <span class="nx">button</span><span class="o">:</span><span class="s1">'element_id'</span><span class="p">,</span>    <span class="c1">//The element ID you want to use as file input</span>
+        <span class="p">});</span>
+</pre></div>
+
+<ul>
+<li><strong>Use Rajax with styled file input</strong></li>
 </ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span><span class="o">=</span><span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="nx">form</span><span class="p">,</span>
      <span class="p">{</span>
          <span class="nx">finputs</span><span class="o">:</span> <span class="p">{</span>                             <span class="c1">//All Styled file input options, user input_name as key</span>
@@ -96,34 +94,32 @@
 </pre></div>
 
 <ul>
-<li>
-<p><strong>Use with other libraries which bind to the form submit event</strong></p>
+<li><strong>Use with other libraries which bind to the form submit event</strong></li>
+</ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="c1">//autoSubmit : false,       //Default value is false, you can omit this option</span>
+        <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//Complete Actions</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
 
-<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">'my-form-id'</span><span class="p">,</span>
-<span class="p">{</span>
-    <span class="c1">//autoSubmit : false,       //Default value is false, you can omit this option</span>
-    <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//Complete Actions</span>
-    <span class="p">}</span>
-<span class="p">});</span>
-
-<span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
+    <span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
 </pre></div>
-</li>
-<li>
-<p><strong>Use without a form!</strong></p>
 
-<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span>
-<span class="p">{</span>
-    <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//Complete Actions</span>
-    <span class="p">}</span>
-<span class="p">});</span>
+<ul>
+<li><strong>Use without a form!</strong></li>
+</ul><div class="highlight highlight-javascript"><pre>    <span class="kd">var</span> <span class="nx">rajax_obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Rajax</span><span class="p">(</span><span class="s1">''</span><span class="p">,</span>
+    <span class="p">{</span>
+        <span class="nx">onComplete</span> <span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+                <span class="c1">//Complete Actions</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
 
-<span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
+    <span class="nx">rajax_obj</span><span class="p">.</span><span class="nx">post</span><span class="p">();</span>   <span class="c1">//Trigger submitting the form manually</span>
 </pre></div>
-</li>
-<li><p><strong>Cross domain Implementation</strong></p></li>
+
+<ul>
+<li><strong>Cross domain Implementation</strong></li>
 </ul><p>Cross domain communication need some extra scripting and its till experimental. only checked on FF10, IE9, Chrome17. Hope fully it should work on other version of browser. To perform cross browser submission you need to follow the steps bellow:</p>
 
 <ul>
@@ -256,6 +252,22 @@ message to show on no selected file error</p></li>
 <li><p><strong>maximumAllowedExceededMsg</strong><br>
 type: string<br>
 Message to show on file count exceeded maximumAllowed. You can use {n} place holder to display maximum allowed number</p></li>
+<li><p><strong>typeErrorDeniedExtensionMsg</strong><br>
+type: string<br>
+default: *.{s} file is not allowed<br>
+Message to show on selecting a denied file extension. You can use {s} place holder to display extension</p></li>
+<li><p><strong>typeErrorDeniedTypeMsg</strong><br>
+type: string<br>
+default: {s} file(s) are not allowed<br>
+Message to show on selecting a denied file type. You can use {s} place holder to display types</p></li>
+<li><p><strong>typeErrorFileTypeNotAllowedMsg</strong><br>
+type: string<br>
+default: You are allowed to select {s} file(s) only<br>
+Message to show on selecting a file type that is not in allowed list. You can use {s} place holder to display types those are allowed</p></li>
+<li><p><strong>typeErrorExtensionNotAllowedMsg</strong><br>
+type: string<br>
+default: only {s} file(s) are allowed<br>
+Message to show on selecting a file with extension that is not in allowed list. You can use {s} place holder to display extensions those are allowed</p></li>
 <li><p><strong>onClear</strong><br>
 Type: Function( SFileInput file)<br>
 A function to be called when the file input reseted or the form reseted. The function gets passed one arguments: The SFileInput object.</p></li>
