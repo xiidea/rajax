@@ -32,3 +32,4 @@
   21. Cross Domain Support added V3.1
   22. All Error Messages moved to settings option [V3.2-v3.4]
   23. Bug fixes with required options for finputs. This was not working for select submitting form for second time [V3.4.1]
+  24. Bug fixed. error on form within form [V3.4.2]

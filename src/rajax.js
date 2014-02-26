@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.4.1
+ * v3.4.2
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -713,7 +713,7 @@
                     inputMoveTo = self._label;
                 }
 
-                if (!self._parentForm) {
+                if (self._form.generated) {
                     var dummyDiv = GetElement('dummy-' + inputMoveTo.id);
                     if (dummyDiv) {
                         removeNode(dummyDiv);
@@ -760,8 +760,8 @@
             this._input = input;
         },
 
-        _moveInput: function (el, wrapper_el) {
-            var el = GetElement(el);
+        _moveInput: function (element, wrapper_el) {
+            var el = GetElement(element);
             var self = this;
             if (self._input) {
                 //alert("everything ok "+self._input.id)
