@@ -2,7 +2,7 @@
  * rajax a javascript iframe form submit
  * with styled form input support
  *
- * v3.4.2
+ * v3.4.3
  *
  * Submit ajax like form along with file input
  * Any styled element can be used as File Input
@@ -71,7 +71,7 @@
 
     function stopDefault(e) {
         if (e && e.preventDefault) e.preventDefault();
-        else if (window.event && window.event.returnValue);
+        else if (window.event && window.event.returnValue)
             window.event.returnValue = false;
     }
 
@@ -481,6 +481,10 @@
         if (!form) {	//for now If form not found throw error
             throw new Error('The input is without a form element');
         }
+
+        form.method = "POST";
+        form.setAttribute("enctype", "multipart/form-data");
+        form.setAttribute("encoding", "multipart/form-data");
 
         var self = this;
 
@@ -1089,7 +1093,7 @@
          * @return {Element} form
          */
         _configForm: function (iframe, form) {
-            var settings = this._settings;
+            var settings = this._settings, div;
 
             form.setAttribute('action', settings.action);
             if (settings.debug) {
@@ -1097,23 +1101,21 @@
             } else {
                 form.setAttribute('target', iframe.name);
             }
-            form.method = "POST";
-            form.setAttribute("enctype", "multipart/form-data");
-            form.setAttribute("encoding", "multipart/form-data");
-
 
             // Create hidden input element for each data key
             // And put it in hidden div
-            if (document.getElementById('rajax_input_holder' + iframe.name)) {	//If div already exist use it
-                var div = document.getElementById('rajax_input_holder' + iframe.name);
+            var inputHolderElementId = 'rajax_input_holder' + iframe.name;
+
+            if (document.getElementById(inputHolderElementId)) {	//If div already exist use it
+                div = document.getElementById(inputHolderElementId);
                 div.innerHTML = "";	//Remove earlier assigned values
             } else {				//Else create it
-                var div = document.createElement("div");
+                div = document.createElement("div");
                 addStyles(div, {
                     'display': 'none',
                     'position': 'absolute'
                 });
-                div.setAttribute("id", 'rajax_input_holder' + iframe.name);
+                div.setAttribute("id", inputHolderElementId);
                 form.appendChild(div);
             }
 
@@ -1262,7 +1264,7 @@
          */
         post: function () {
 
-            var self = this, settings = this._settings;
+            var settings = this._settings;
 
             if (!this._form) {
                 return false;
@@ -1288,7 +1290,7 @@
             }
 
             // user returned false to cancel submit
-            if (false === settings.onSubmit.call(this, this, this._form)) {
+            if (false === settings.onSubmit.call(this, this, form)) {
                 return false;
             }
 

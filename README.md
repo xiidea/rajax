@@ -17,7 +17,7 @@ Key Features
 
 Current Active Version
 ======================
-v 3.4.2
+v 3.4.3
 
  
 USES and Cookbook
