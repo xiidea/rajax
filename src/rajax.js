@@ -398,7 +398,7 @@
 
             // When user selects a file, useful with Custom validation
             // You can return false to cancel upload			
-            onChange: function (file, extension) {
+            onChange: function (file, extension, input) {
             },
 
             //When user select any denied File
@@ -680,7 +680,7 @@
                     return;
                 }
 
-                if (false === self._settings.onChange.call(self, file, ext)) {
+                if (false === self._settings.onChange.call(self, file, ext, self._input)) {
                     return;
                 }
 
