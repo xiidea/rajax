@@ -231,7 +231,7 @@
      * @param {element} The dom element reference (dom element/jquery element/element id)
      * @return {element object}
      */
-    function GetElement(el) {
+    function getElement(el) {
         if (el.jquery) {
             // jQuery object was passed
             el = el[0];
@@ -254,8 +254,8 @@
      * @param {int} depth of search default 0
      * @return filename
      */
-    function GetParentTag(element, tag, depth) {
-        var el = GetElement(element);
+    function getParentTag(element, tag, depth) {
+        var el = getElement(element);
         if (!el.parentNode)				//return null if parent node is not exist
             return null;
         if (typeof tag == 'undefined')		//return parent node if node type is not defined
@@ -267,10 +267,10 @@
         }
         else if (el.parentNode.nodeName.toLowerCase() == tag.toLowerCase()) {
             c--;
-            return GetParentTag(el.parentNode, tag.toLowerCase(), c);
+            return getParentTag(el.parentNode, tag.toLowerCase(), c);
         }
         else {
-            return GetParentTag(el.parentNode, tag.toLowerCase(), c);
+            return getParentTag(el.parentNode, tag.toLowerCase(), c);
         }
     }
 
@@ -442,7 +442,7 @@
         }
 
 
-        var button = GetElement(this._settings['button']);
+        var button = getElement(this._settings['button']);
 
         if (!button || button.nodeType !== 1) {
             throw new Error("Please make sure that you're passing a valid element");
@@ -473,9 +473,9 @@
         // If disabled clicking on button won't do anything
         this._disabled = false;
 
-        this._parentForm = GetParentTag(this._button, 'form');
+        this._parentForm = getParentTag(this._button, 'form');
 
-        var form = this._settings.targetForm || this._parentForm
+        var form = this._settings.targetForm || this._parentForm;
 
         //To do, if form is not found then create a form element to handle the submit process
         if (!form) {	//for now If form not found throw error
@@ -483,6 +483,7 @@
         }
 
         form.method = "POST";
+        form.isValidInput = {};
         form.setAttribute("enctype", "multipart/form-data");
         form.setAttribute("encoding", "multipart/form-data");
 
@@ -490,6 +491,10 @@
 
         addEvent(form, 'reset', function () {
             self._clearInput();
+        });
+
+        addEvent(form, 'validate', function () {
+            form.isValidInput[this._settings.name] = self._validate();
         });
 
         this._form = form;
@@ -687,7 +692,7 @@
 
                 //  if (self._settings.showFileName) {
                 if (!self._label) {
-                    var label = GetElement(self._settings.selectedFileLabel);
+                    var label = getElement(self._settings.selectedFileLabel);
                     if (!label) {
                         label = self._createLabel()
                     }
@@ -718,7 +723,7 @@
                 }
 
                 if (self._form.generated) {
-                    var dummyDiv = GetElement('dummy-' + inputMoveTo.id);
+                    var dummyDiv = getElement('dummy-' + inputMoveTo.id);
                     if (dummyDiv) {
                         removeNode(dummyDiv);
                     }
@@ -765,7 +770,7 @@
         },
 
         _moveInput: function (element, wrapper_el) {
-            var el = GetElement(element);
+            var el = getElement(element);
             var self = this;
             if (self._input) {
                 //alert("everything ok "+self._input.id)
@@ -827,7 +832,7 @@
 
             if (self._label) {
                 self._label.innerHTML = "";
-                var dummyContainer = GetElement('dummy-' + this._label.id);
+                var dummyContainer = getElement('dummy-' + this._label.id);
                 dummyContainer && removeNode(dummyContainer);
             }
 
@@ -999,7 +1004,7 @@
 
         // form isn't necessary a dom element
         if (form != "") {
-            var form = GetElement(form);
+            var form = getElement(form);
             if (!form || form.nodeType !== 1) {
                 throw new Error("Please make sure that you're passing a valid element");
             }
