@@ -392,6 +392,8 @@
             //Message show when selected extension is not in allowed list
             typeErrorExtensionNotAllowedMsg: 'only {s} file(s) are allowed',
 
+            removeButtonTemplate: "<span>x</span>",
+
             // When The file input reseted or the form reseted
             onClear: function (SFileInputObj) {
             },
@@ -809,7 +811,7 @@
             var self = this;
             var remove = document.createElement("a");
             addClass(remove, self._settings.multiInputRemoveClass);
-            remove.innerHTML = "<span>x</span>";
+            remove.innerHTML = self._settings.removeButtonTemplate;
 
             addEvent(remove, 'click', function () {
                 self.fileselected = self.fileselected - 1;
